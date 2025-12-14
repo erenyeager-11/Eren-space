@@ -5,36 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gentle Space 🌙</title>
 <style>
-/* ---------- Global ---------- */
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 body{height:100vh;overflow:hidden;background:radial-gradient(circle at top,#1b1f3b,#07080f);color:#fff;display:flex;justify-content:center;align-items:center;}
 button{cursor:pointer;border:none;outline:none;transition:0.3s;font-weight:600;}
 input,textarea,select{outline:none;border:none;font-family:inherit;color:white;}
-
-/* ---------- Background ---------- */
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;}
 .star,.heart{position:absolute;bottom:-20px;opacity:0.7;animation:floatUp linear infinite;}
 .star{width:6px;height:6px;background:white;border-radius:50%;}
 .heart{font-size:18px;}
 @keyframes floatUp{from{transform:translateY(0);opacity:0;}20%{opacity:0.8;}to{transform:translateY(-120vh);opacity:0;}}
 
-/* ---------- Container & Pages ---------- */
+/* Container & Pages */
 .container{width:100%;height:100%;display:flex;transition:transform 0.8s ease-in-out;}
 .page{min-width:100vw;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(18px);background: rgba(255,255,255,0.05);border-radius:25px;padding:40px;box-shadow:0 8px 30px rgba(0,0,0,0.3);gap:15px;transition:0.5s;}
 h1{font-size:2.4rem;text-align:center;margin-bottom:10px;letter-spacing:1px;}
 p{text-align:center;opacity:0.8;max-width:500px;margin-bottom:15px;}
 
-/* ---------- Nav ---------- */
+/* Nav */
 .nav{position:fixed;bottom:20px;width:100%;display:flex;justify-content:center;gap:20px;}
 .nav button{padding:12px 22px;border-radius:30px;background:linear-gradient(135deg,#6a5acd,#00bfff);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
 .nav button:hover{filter: brightness(1.2);}
 
-/* ---------- Inputs ---------- */
+/* Inputs */
 input,select{padding:12px 15px;border-radius:25px;background:rgba(255,255,255,0.15);}
 textarea{width:260px;height:140px;padding:15px;border-radius:20px;background:rgba(255,255,255,0.1);resize:none;}
 #notes::placeholder{opacity:0.6;font-style:italic;}
 
-/* ---------- Todo ---------- */
+/* Todo */
 #todoInput{width:220px;margin-bottom:10px;}
 ul{margin-top:15px;list-style:none;padding-left:0;width:260px;}
 li{background:rgba(255,255,255,0.1);padding:10px 15px;border-radius:20px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;transition:0.3s;cursor:pointer;}
@@ -42,19 +39,24 @@ li.done{text-decoration:line-through;opacity:0.6;}
 li button{margin-left:5px;padding:5px 8px;border-radius:12px;font-size:0.85rem;background:rgba(255,255,255,0.25);}
 li:hover{background:rgba(255,255,255,0.2);}
 
-/* ---------- Timer ---------- */
+/* Timer */
 .time{font-size:2.5rem;font-weight:600;margin:15px 0;letter-spacing:1px;}
 .timer-controls{display:flex;gap:15px;margin-bottom:15px;}
 .timer-controls button{padding:10px 18px;border-radius:25px;background:linear-gradient(135deg,#ff7f50,#ff1493);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.25);}
 .timer-controls button:hover{filter: brightness(1.15);}
 #timerType{margin-bottom:15px;width:200px;}
 
-/* ---------- Sound Page ---------- */
-#soundSelect{padding:12px 15px;border-radius:25px;background:rgba(255,255,255,0.15);}
+/* Fullscreen button */
+#fullscreenBtn{position:fixed;top:20px;right:20px;padding:10px 15px;border-radius:15px;background:linear-gradient(135deg,#00bfff,#6a5acd);color:white;z-index:9999;cursor:pointer;}
 </style>
 </head>
 <body>
+
 <div class="bg"></div>
+
+<!-- Fullscreen toggle -->
+<button id="fullscreenBtn">Fullscreen / PIP</button>
+
 <div class="container" id="slider">
 
 <!-- Page 0: Email Login -->
@@ -120,24 +122,7 @@ li:hover{background:rgba(255,255,255,0.2);}
   <textarea id="notes" placeholder="You're safe here…"></textarea>
 </section>
 
-<!-- Page 6: Study Sounds -->
-<section class="page">
-  <h1>Study Sounds 🎶</h1>
-  <p>Pick a sound to help you focus.</p>
-  <select id="soundSelect" onchange="playSound()">
-    <option value="">-- Select a sound --</option>
-    <option value="rain">Rain</option>
-    <option value="forest">Forest</option>
-    <option value="coffee">Coffee Shop</option>
-    <option value="white">White Noise</option>
-  </select>
-  <div style="margin-top:20px;">
-    <button onclick="pauseSound()">Pause</button>
-    <button onclick="stopSound()">Stop</button>
-  </div>
-</section>
-
-<!-- Page 7: Outro -->
+<!-- Page 6: Outro -->
 <section class="page">
   <h1>That's it 🤍</h1>
   <p>Be gentle with yourself. You don't have to win every day.</p>
@@ -152,36 +137,35 @@ li:hover{background:rgba(255,255,255,0.2);}
 </div>
 
 <script>
-/* ---------- Background ---------- */
+/* Background Particles */
 const bg=document.querySelector('.bg');
 function createParticle(){const el=document.createElement('div');const isHeart=Math.random()>0.7;el.className=isHeart?'heart':'star';el.innerHTML=isHeart?'❤':'';el.style.left=Math.random()*100+'vw';el.style.animationDuration=(8+Math.random()*8)+'s';bg.appendChild(el);setTimeout(()=>el.remove(),16000);}
 setInterval(createParticle,300);
 
-/* ---------- Slider ---------- */
+/* Slider */
 let index=0;
 const slider=document.getElementById('slider');
 function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
 function next(){
-  if(!currentUser){ alert('Please enter a valid email to continue!'); return; }
-  if(index < 7){ index++; update(); saveData(); }
+  if(index===0&&!currentUser){ alert('Please enter a valid email!'); return; }
+  if(index<6){ index++; update(); saveData(); }
 }
 function prev(){ if(index>0){ index--; update(); saveData(); }}
 
-/* ---------- Pseudo Gmail Login ---------- */
+/* Login */
 let currentUser=null;
 function login(){
-  const email = document.getElementById('userEmail').value.trim();
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!email || !emailPattern.test(email)){ alert('Please enter a valid email address!'); return; }
-  currentUser = email;
+  const email=document.getElementById('userEmail').value.trim();
+  const pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!email||!pattern.test(email)){ alert('Enter a valid email!'); return; }
+  currentUser=email;
   if(!localStorage.getItem(currentUser)){
-    localStorage.setItem(currentUser,JSON.stringify({ todos:[], stopwatch:0, pomodoro:{time:1500,status:'Work',running:false}, notes:'' }));
+    localStorage.setItem(currentUser,JSON.stringify({todos:[],stopwatch:0,pomodoro:{time:1500,status:'Work',running:false},notes:''}));
   }
-  loadUserData();
-  alert('Welcome, '+currentUser);
+  loadUserData(); alert('Welcome, '+currentUser); index++; update();
 }
 
-/* ---------- To-Do ---------- */
+/* To-Do */
 const todoInput=document.getElementById('todoInput');
 const todoList=document.getElementById('todoList');
 function addTodo(){
@@ -196,14 +180,14 @@ function addTodo(){
   todoInput.value=''; saveData();
 }
 
-/* ---------- Stopwatch ---------- */
+/* Stopwatch */
 let t=0,timer=null;
 function start(){if(!timer){timer=setInterval(()=>{t++;render();saveData();},1000);}}
 function stop(){clearInterval(timer);timer=null;saveData();}
 function reset(){stop();t=0;render();saveData();}
 function render(){const m=String(Math.floor(t/60)).padStart(2,'0');const s=String(t%60).padStart(2,'0');document.getElementById('time').textContent=`${m}:${s}`;}
 
-/* ---------- Pomodoro ---------- */
+/* Pomodoro */
 let pomodoroTimer=null,pomodoroTime=1500,pomodoroStatus='Work';
 function switchTimer(){const type=document.getElementById('timerType').value;
 document.getElementById('stopwatchDiv').style.display=(type==='stopwatch')?'block':'none';
@@ -214,32 +198,14 @@ function resetPomodoro(){stopPomodoro();pomodoroTime=1500;pomodoroStatus='Work';
 function runPomodoro(){if(pomodoroTime>0){pomodoroTime--;renderPomodoro();saveData();}else{pomodoroStatus=(pomodoroStatus==='Work')?'Break':'Work';pomodoroTime=(pomodoroStatus==='Work')?1500:300;renderPomodoro();saveData();alert('Pomodoro '+pomodoroStatus+' started!');}}
 function renderPomodoro(){const m=String(Math.floor(pomodoroTime/60)).padStart(2,'0');const s=String(pomodoroTime%60).padStart(2,'0');document.getElementById('pomodoroTime').textContent=`${m}:${s}`;document.getElementById('pomodoroStatus').textContent=pomodoroStatus;}
 
-/* ---------- Notes ---------- */
+/* Notes */
 const notesArea=document.getElementById('notes');
 
-/* ---------- Sounds ---------- */
-const sounds = {
-  rain: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  forest: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-  coffee: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-  white: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'
-};
-let currentAudio = new Audio();
-currentAudio.loop = true;
-function playSound(){const sound=document.getElementById('soundSelect').value;if(sound && sounds[sound]){currentAudio.src=sounds[sound];currentAudio.play();}else{currentAudio.pause();}}
-function pauseSound(){currentAudio.pause();}
-function stopSound(){currentAudio.pause();currentAudio.currentTime=0;}
-
-/* ---------- Save & Load ---------- */
+/* Save & Load */
 function saveData(){
   if(!currentUser) return;
   const todos=[]; todoList.querySelectorAll('li').forEach(li=>{todos.push({text:li.firstChild.textContent,done:li.classList.contains('done')});});
-  localStorage.setItem(currentUser,JSON.stringify({
-    todos:todos,
-    stopwatch:t,
-    pomodoro:{time:pomodoroTime,status:pomodoroStatus,running:!!pomodoroTimer},
-    notes:notesArea.value
-  }));
+  localStorage.setItem(currentUser,JSON.stringify({todos:todos,stopwatch:t,pomodoro:{time:pomodoroTime,status:pomodoroStatus,running:!!pomodoroTimer},notes:notesArea.value}));
 }
 function loadUserData(){
   if(!currentUser) return;
@@ -254,20 +220,34 @@ function loadUserData(){
     delBtn.onclick=(e)=>{e.stopPropagation();li.remove();saveData();};
     li.appendChild(editBtn);li.appendChild(delBtn);todoList.appendChild(li);
   });
-  // Stopwatch
   t=data.stopwatch||0; render();
-  // Pomodoro
   pomodoroTime=data.pomodoro.time; pomodoroStatus=data.pomodoro.status; renderPomodoro();
   if(data.pomodoro.running) startPomodoro();
-  // Notes
   notesArea.value=data.notes||'';
 }
 
-/* ---------- Auto-load last user ---------- */
-window.onload=function(){
-  const keys=Object.keys(localStorage);
-  if(keys.length>0){currentUser=keys[0];loadUserData();}
+/* Auto-load last user */
+window.onload=function(){const keys=Object.keys(localStorage);if(keys.length>0){currentUser=keys[0];loadUserData();}};
+
+/* Fullscreen */
+const fsBtn = document.getElementById('fullscreenBtn');
+let isFullscreen = false;
+fsBtn.onclick = () => {
+  if(!isFullscreen){ openFullscreen(document.documentElement); } 
+  else { closeFullscreen(); }
+  isFullscreen = !isFullscreen;
 };
+function openFullscreen(elem) {
+  if (elem.requestFullscreen) { elem.requestFullscreen(); } 
+  else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); } 
+  else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
+}
+function closeFullscreen() {
+  if (document.exitFullscreen) { document.exitFullscreen(); } 
+  else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } 
+  else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+}
 </script>
+
 </body>
 </html>
