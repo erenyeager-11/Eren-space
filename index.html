@@ -6,62 +6,60 @@
 <title>Gentle Space 🌙</title>
 <style>
 /* ---------- Global ---------- */
-*{ margin:0; padding:0; box-sizing:border-box; font-family: 'Poppins', sans-serif; }
-body{ height:100vh; overflow:hidden; background: radial-gradient(circle at top, #1b1f3b, #07080f); color:#fff; display:flex; justify-content:center; align-items:center; }
-button{ cursor:pointer; border:none; outline:none; transition:0.3s; font-weight:600; }
-input, textarea, select{ outline:none; border:none; font-family: inherit; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{height:100vh;overflow:hidden;background:radial-gradient(circle at top,#1b1f3b,#07080f);color:#fff;display:flex;justify-content:center;align-items:center;}
+button{cursor:pointer;border:none;outline:none;transition:0.3s;font-weight:600;}
+input,textarea,select{outline:none;border:none;font-family:inherit;color:white;}
 
 /* ---------- Background ---------- */
-.bg{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
-.star, .heart{ position:absolute; bottom:-20px; opacity:0.7; animation: floatUp linear infinite; }
-.star{ width:6px; height:6px; background:white; border-radius:50%; }
-.heart{ font-size:18px; }
-@keyframes floatUp{ from{ transform:translateY(0); opacity:0; } 20%{ opacity:0.8; } to{ transform:translateY(-120vh); opacity:0; } }
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;}
+.star,.heart{position:absolute;bottom:-20px;opacity:0.7;animation:floatUp linear infinite;}
+.star{width:6px;height:6px;background:white;border-radius:50%;}
+.heart{font-size:18px;}
+@keyframes floatUp{from{transform:translateY(0);opacity:0;}20%{opacity:0.8;}to{transform:translateY(-120vh);opacity:0;}}
 
 /* ---------- Container & Pages ---------- */
-.container{ width:100%; height:100%; display:flex; transition:transform 0.8s ease-in-out; }
-.page{ min-width:100vw; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(18px); background: rgba(255,255,255,0.05); border-radius:25px; padding:40px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); gap:15px; transition:0.5s; }
-h1{ font-size:2.4rem; text-align:center; margin-bottom:10px; letter-spacing:1px; }
-p{ text-align:center; opacity:0.8; max-width:500px; margin-bottom:15px; }
+.container{width:100%;height:100%;display:flex;transition:transform 0.8s ease-in-out;}
+.page{min-width:100vw;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(18px);background: rgba(255,255,255,0.05);border-radius:25px;padding:40px;box-shadow:0 8px 30px rgba(0,0,0,0.3);gap:15px;transition:0.5s;}
+h1{font-size:2.4rem;text-align:center;margin-bottom:10px;letter-spacing:1px;}
+p{text-align:center;opacity:0.8;max-width:500px;margin-bottom:15px;}
 
 /* ---------- Nav ---------- */
-.nav{ position:fixed; bottom:20px; width:100%; display:flex; justify-content:center; gap:20px; }
-.nav button{ padding:12px 22px; border-radius:30px; background:linear-gradient(135deg,#6a5acd,#00bfff); color:white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-.nav button:hover{ filter: brightness(1.2); }
+.nav{position:fixed;bottom:20px;width:100%;display:flex;justify-content:center;gap:20px;}
+.nav button{padding:12px 22px;border-radius:30px;background:linear-gradient(135deg,#6a5acd,#00bfff);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+.nav button:hover{filter: brightness(1.2);}
 
 /* ---------- Inputs ---------- */
-input, select{ padding:12px 15px; border-radius:25px; background:rgba(255,255,255,0.15); color:white; }
-textarea{ width:260px; height:140px; padding:15px; border-radius:20px; background:rgba(255,255,255,0.1); color:white; resize:none; }
+input,select{padding:12px 15px;border-radius:25px;background:rgba(255,255,255,0.15);}
+textarea{width:260px;height:140px;padding:15px;border-radius:20px;background:rgba(255,255,255,0.1);resize:none;}
+#notes::placeholder{opacity:0.6;font-style:italic;}
 
 /* ---------- Todo ---------- */
-#todoInput{ width:220px; margin-bottom:10px; }
-ul{ margin-top:15px; list-style:none; padding-left:0; width:260px; }
-li{ background:rgba(255,255,255,0.1); padding:10px 15px; border-radius:20px; margin:8px 0; display:flex; justify-content:space-between; align-items:center; transition:0.3s; cursor:pointer; }
-li.done{ text-decoration:line-through; opacity:0.6; }
-li button{ margin-left:5px; padding:5px 8px; border-radius:12px; font-size:0.85rem; background:rgba(255,255,255,0.25); }
-li:hover{ background:rgba(255,255,255,0.2); }
+#todoInput{width:220px;margin-bottom:10px;}
+ul{margin-top:15px;list-style:none;padding-left:0;width:260px;}
+li{background:rgba(255,255,255,0.1);padding:10px 15px;border-radius:20px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;transition:0.3s;cursor:pointer;}
+li.done{text-decoration:line-through;opacity:0.6;}
+li button{margin-left:5px;padding:5px 8px;border-radius:12px;font-size:0.85rem;background:rgba(255,255,255,0.25);}
+li:hover{background:rgba(255,255,255,0.2);}
 
 /* ---------- Timer ---------- */
-.time{ font-size:2.5rem; font-weight:600; margin:15px 0; letter-spacing:1px; }
-.timer-controls{ display:flex; gap:15px; margin-bottom:15px; }
-.timer-controls button{ padding:10px 18px; border-radius:25px; background:linear-gradient(135deg,#ff7f50,#ff1493); color:white; box-shadow:0 4px 15px rgba(0,0,0,0.25); }
-.timer-controls button:hover{ filter: brightness(1.15); }
-#timerType{ margin-bottom:15px; width:200px; }
-
-/* ---------- Notes ---------- */
-#notes::placeholder{ opacity:0.6; font-style:italic; }
+.time{font-size:2.5rem;font-weight:600;margin:15px 0;letter-spacing:1px;}
+.timer-controls{display:flex;gap:15px;margin-bottom:15px;}
+.timer-controls button{padding:10px 18px;border-radius:25px;background:linear-gradient(135deg,#ff7f50,#ff1493);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.25);}
+.timer-controls button:hover{filter: brightness(1.15);}
+#timerType{margin-bottom:15px;width:200px;}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="container" id="slider">
 
-<!-- Page 0: Sign-in -->
+<!-- Page 0: Email Login -->
 <section class="page">
-  <h1>Sign In 👤</h1>
-  <input type="text" id="username" placeholder="Username" /><br>
-  <input type="password" id="password" placeholder="Password" /><br><br>
-  <button onclick="login()">Sign In</button>
+  <h1>Welcome! 👋</h1>
+  <p>Enter your email to continue and we’ll remember you.</p>
+  <input type="email" id="userEmail" placeholder="your.email@example.com" /><br><br>
+  <button onclick="login()">Continue</button>
 </section>
 
 <!-- Page 1: Welcome -->
@@ -109,7 +107,7 @@ li:hover{ background:rgba(255,255,255,0.2); }
       <button onclick="stopPomodoro()">Stop</button>
       <button onclick="resetPomodoro()">Reset</button>
     </div>
-    <p id="pomodoroStatus" style="font-size:1.2rem; font-weight:600;">Work</p>
+    <p id="pomodoroStatus" style="font-size:1.2rem;font-weight:600;">Work</p>
   </div>
 </section>
 
@@ -123,7 +121,7 @@ li:hover{ background:rgba(255,255,255,0.2); }
 <section class="page">
   <h1>That's it 🤍</h1>
   <p>Be gentle with yourself. You don't have to win every day.</p>
-  <p style="margin-top:20px; opacity:0.6;">— by Eren</p>
+  <p style="margin-top:20px;opacity:0.6;">— by Eren</p>
 </section>
 
 </div>
@@ -134,40 +132,31 @@ li:hover{ background:rgba(255,255,255,0.2); }
 </div>
 
 <script>
-/* ---------- Background Particles ---------- */
-const bg = document.querySelector('.bg');
-function createParticle(){
-  const el=document.createElement('div');
-  const isHeart=Math.random()>0.7;
-  el.className=isHeart?'heart':'star';
-  el.innerHTML=isHeart?'❤':'';
-  el.style.left=Math.random()*100+'vw';
-  el.style.animationDuration=(8+Math.random()*8)+'s';
-  bg.appendChild(el);
-  setTimeout(()=>el.remove(),16000);
-}
+/* ---------- Background ---------- */
+const bg=document.querySelector('.bg');
+function createParticle(){const el=document.createElement('div');const isHeart=Math.random()>0.7;el.className=isHeart?'heart':'star';el.innerHTML=isHeart?'❤':'';el.style.left=Math.random()*100+'vw';el.style.animationDuration=(8+Math.random()*8)+'s';bg.appendChild(el);setTimeout(()=>el.remove(),16000);}
 setInterval(createParticle,300);
 
 /* ---------- Slider ---------- */
 let index=0;
 const slider=document.getElementById('slider');
-function update(){ slider.style.transform=`translateX(-${index*100}vw)`; }
-function next(){ if(index<6){ index++; update(); saveData(); }}
-function prev(){ if(index>0){ index--; update(); saveData(); }}
+function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
+function next(){if(index<6){index++;update();saveData();}}
+function prev(){if(index>0){index--;update();saveData();}}
 
-/* ---------- User Auth ---------- */
+/* ---------- Pseudo Gmail Login ---------- */
 let currentUser=null;
 function login(){
-  const user=document.getElementById('username').value;
-  const pass=document.getElementById('password').value;
-  if(!user||!pass){ alert('Enter username & password'); return; }
-  const data=JSON.parse(localStorage.getItem('users')||'{}');
-  if(data[user]&&data[user].password!==pass){ alert('Incorrect password'); return; }
-  if(!data[user]) data[user]={password:pass,todos:[],stopwatch:0,pomodoro:{time:1500,status:'Work',running:false},notes:''};
-  localStorage.setItem('users',JSON.stringify(data));
-  currentUser=user;
+  const email=document.getElementById('userEmail').value.trim();
+  if(!email){alert('Enter a valid email');return;}
+  currentUser=email;
+  if(!localStorage.getItem(currentUser)){ // initialize data if first login
+    localStorage.setItem(currentUser, JSON.stringify({
+      todos:[],stopwatch:0,pomodoro:{time:1500,status:'Work',running:false},notes:''
+    }));
+  }
   loadUserData();
-  alert('Signed in as '+user);
+  alert('Welcome, '+currentUser);
 }
 
 /* ---------- To-Do ---------- */
@@ -178,37 +167,30 @@ function addTodo(){
   const li=document.createElement('li'); li.textContent=todoInput.value;
   li.onclick=()=>{ li.classList.toggle('done'); saveData(); };
   const editBtn=document.createElement('button'); editBtn.textContent='✏️';
-  editBtn.onclick=(e)=>{ e.stopPropagation(); const val=prompt('Edit Task',li.firstChild.textContent); if(val){ li.textContent=val; li.appendChild(editBtn); li.appendChild(delBtn); saveData(); } };
+  editBtn.onclick=(e)=>{e.stopPropagation();const val=prompt('Edit Task',li.firstChild.textContent);if(val){li.textContent=val;li.appendChild(editBtn);li.appendChild(delBtn);saveData();}};
   const delBtn=document.createElement('button'); delBtn.textContent='❌';
-  delBtn.onclick=(e)=>{ e.stopPropagation(); li.remove(); saveData(); };
+  delBtn.onclick=(e)=>{e.stopPropagation();li.remove();saveData();};
   li.appendChild(editBtn); li.appendChild(delBtn); todoList.appendChild(li);
   todoInput.value=''; saveData();
 }
 
 /* ---------- Stopwatch ---------- */
 let t=0,timer=null;
-function start(){ if(!timer){ timer=setInterval(()=>{ t++; render(); saveData();},1000); } }
-function stop(){ clearInterval(timer); timer=null; saveData(); }
-function reset(){ stop(); t=0; render(); saveData(); }
-function render(){ const m=String(Math.floor(t/60)).padStart(2,'0'); const s=String(t%60).padStart(2,'0'); document.getElementById('time').textContent=`${m}:${s}`; }
+function start(){if(!timer){timer=setInterval(()=>{t++;render();saveData();},1000);}}
+function stop(){clearInterval(timer);timer=null;saveData();}
+function reset(){stop();t=0;render();saveData();}
+function render(){const m=String(Math.floor(t/60)).padStart(2,'0');const s=String(t%60).padStart(2,'0');document.getElementById('time').textContent=`${m}:${s}`;}
 
 /* ---------- Pomodoro ---------- */
-let pomodoroTimer=null;
-let pomodoroTime=1500;
-let pomodoroStatus='Work';
-function switchTimer(){ const type=document.getElementById('timerType').value;
-  document.getElementById('stopwatchDiv').style.display=(type==='stopwatch')?'block':'none';
-  document.getElementById('pomodoroDiv').style.display=(type==='pomodoro')?'block':'none';
-}
-function startPomodoro(){ if(!pomodoroTimer) pomodoroTimer=setInterval(runPomodoro,1000); }
-function stopPomodoro(){ clearInterval(pomodoroTimer); pomodoroTimer=null; saveData(); }
-function resetPomodoro(){ stopPomodoro(); pomodoroTime=1500; pomodoroStatus='Work'; renderPomodoro(); saveData(); }
-function runPomodoro(){
-  if(pomodoroTime>0){ pomodoroTime--; renderPomodoro(); saveData(); }
-  else{ if(pomodoroStatus==='Work'){ pomodoroStatus='Break'; pomodoroTime=300; } else{ pomodoroStatus='Work'; pomodoroTime=1500; }
-    renderPomodoro(); saveData(); alert('Pomodoro '+pomodoroStatus+' started!'); }
-}
-function renderPomodoro(){ const m=String(Math.floor(pomodoroTime/60)).padStart(2,'0'); const s=String(pomodoroTime%60).padStart(2,'0'); document.getElementById('pomodoroTime').textContent=`${m}:${s}`; document.getElementById('pomodoroStatus').textContent=pomodoroStatus; }
+let pomodoroTimer=null,pomodoroTime=1500,pomodoroStatus='Work';
+function switchTimer(){const type=document.getElementById('timerType').value;
+document.getElementById('stopwatchDiv').style.display=(type==='stopwatch')?'block':'none';
+document.getElementById('pomodoroDiv').style.display=(type==='pomodoro')?'block':'none';}
+function startPomodoro(){if(!pomodoroTimer) pomodoroTimer=setInterval(runPomodoro,1000);}
+function stopPomodoro(){clearInterval(pomodoroTimer);pomodoroTimer=null;saveData();}
+function resetPomodoro(){stopPomodoro();pomodoroTime=1500;pomodoroStatus='Work';renderPomodoro();saveData();}
+function runPomodoro(){if(pomodoroTime>0){pomodoroTime--;renderPomodoro();saveData();}else{pomodoroStatus=(pomodoroStatus==='Work')?'Break':'Work';pomodoroTime=(pomodoroStatus==='Work')?1500:300;renderPomodoro();saveData();alert('Pomodoro '+pomodoroStatus+' started!');}}
+function renderPomodoro(){const m=String(Math.floor(pomodoroTime/60)).padStart(2,'0');const s=String(pomodoroTime%60).padStart(2,'0');document.getElementById('pomodoroTime').textContent=`${m}:${s}`;document.getElementById('pomodoroStatus').textContent=pomodoroStatus;}
 
 /* ---------- Notes ---------- */
 const notesArea=document.getElementById('notes');
@@ -216,37 +198,44 @@ const notesArea=document.getElementById('notes');
 /* ---------- Save & Load ---------- */
 function saveData(){
   if(!currentUser) return;
-  const data=JSON.parse(localStorage.getItem('users')||'{}');
-  const todos=[]; todoList.querySelectorAll('li').forEach(li=>{ todos.push({text:li.firstChild.textContent,done:li.classList.contains('done')}); });
-  data[currentUser].todos=todos;
-  data[currentUser].stopwatch=t;
-  data[currentUser].pomodoro={time:pomodoroTime,status:pomodoroStatus,running:!!pomodoroTimer};
-  data[currentUser].notes=notesArea.value;
-  localStorage.setItem('users',JSON.stringify(data));
+  const todos=[]; todoList.querySelectorAll('li').forEach(li=>{todos.push({text:li.firstChild.textContent,done:li.classList.contains('done')});});
+  localStorage.setItem(currentUser,JSON.stringify({
+    todos:todos,
+    stopwatch:t,
+    pomodoro:{time:pomodoroTime,status:pomodoroStatus,running:!!pomodoroTimer},
+    notes:notesArea.value
+  }));
 }
 function loadUserData(){
   if(!currentUser) return;
-  const data=JSON.parse(localStorage.getItem('users')||'{}')[currentUser];
-  todoList.innerHTML=''; data.todos.forEach(t=>{
-    const li=document.createElement('li'); li.textContent=t.text; if(t.done) li.classList.add('done');
-    li.onclick=()=>{ li.classList.toggle('done'); saveData(); };
-    const editBtn=document.createElement('button'); editBtn.textContent='✏️';
-    editBtn.onclick=(e)=>{ e.stopPropagation(); const val=prompt('Edit Task',li.firstChild.textContent); if(val){ li.textContent=val; li.appendChild(editBtn); li.appendChild(delBtn); saveData(); } };
-    const delBtn=document.createElement('button'); delBtn.textContent='❌';
-    delBtn.onclick=(e)=>{ e.stopPropagation(); li.remove(); saveData(); };
-    li.appendChild(editBtn); li.appendChild(delBtn); todoList.appendChild(li);
+  const data=JSON.parse(localStorage.getItem(currentUser));
+  // Todos
+  todoList.innerHTML='';data.todos.forEach(t=>{
+    const li=document.createElement('li');li.textContent=t.text;if(t.done) li.classList.add('done');
+    li.onclick=()=>{li.classList.toggle('done');saveData();};
+    const editBtn=document.createElement('button');editBtn.textContent='✏️';
+    editBtn.onclick=(e)=>{e.stopPropagation();const val=prompt('Edit Task',li.firstChild.textContent);if(val){li.textContent=val;li.appendChild(editBtn);li.appendChild(delBtn);saveData();}};
+    const delBtn=document.createElement('button');delBtn.textContent='❌';
+    delBtn.onclick=(e)=>{e.stopPropagation();li.remove();saveData();};
+    li.appendChild(editBtn);li.appendChild(delBtn);todoList.appendChild(li);
   });
+  // Stopwatch
   t=data.stopwatch||0; render();
+  // Pomodoro
   pomodoroTime=data.pomodoro.time; pomodoroStatus=data.pomodoro.status; renderPomodoro();
   if(data.pomodoro.running) startPomodoro();
+  // Notes
   notesArea.value=data.notes||'';
 }
+
+/* ---------- Auto-load last user ---------- */
 window.onload=function(){
-  const users=JSON.parse(localStorage.getItem('users')||'{}');
-  if(users){ const lastUser=Object.keys(users)[0]; if(lastUser){ currentUser=lastUser; loadUserData(); } }
+  const keys=Object.keys(localStorage);
+  if(keys.length>0){currentUser=keys[0];loadUserData();}
 };
 </script>
 </body>
 </html>
+
 
 
