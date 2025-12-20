@@ -4,83 +4,154 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gentle Space 🌙</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{height:100vh;overflow:hidden;background:radial-gradient(circle at top,#1b1f3b,#07080f);color:#fff;display:flex;justify-content:center;align-items:center;}
+body{
+  height:100vh;
+  overflow:hidden;
+  background:radial-gradient(circle at top,#1b1f3b,#07080f);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 button{cursor:pointer;border:none;outline:none;transition:0.3s;font-weight:600;}
 input,textarea,select{outline:none;border:none;font-family:inherit;color:white;}
+
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;}
 .star,.heart{position:absolute;bottom:-20px;opacity:0.7;animation:floatUp linear infinite;}
 .star{width:6px;height:6px;background:white;border-radius:50%;}
 .heart{font-size:18px;}
-@keyframes floatUp{from{transform:translateY(0);opacity:0;}20%{opacity:0.8;}to{transform:translateY(-120vh);opacity:0;}}
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:0;}
+  20%{opacity:0.8;}
+  to{transform:translateY(-120vh);opacity:0;}
+}
 
-/* Container & Pages */
+/* Container */
 .container{width:100%;height:100%;display:flex;transition:transform 0.8s ease-in-out;}
-.page{min-width:100vw;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(18px);background: rgba(255,255,255,0.05);border-radius:25px;padding:40px;box-shadow:0 8px 30px rgba(0,0,0,0.3);gap:15px;transition:0.5s;}
-h1{font-size:2.4rem;text-align:center;margin-bottom:10px;letter-spacing:1px;}
-p{text-align:center;opacity:0.8;max-width:500px;margin-bottom:15px;}
+.page{
+  min-width:100vw;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(18px);
+  background:rgba(255,255,255,0.05);
+  border-radius:25px;
+  padding:40px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.3);
+  gap:15px;
+}
+
+h1{font-size:2.4rem;text-align:center;}
+p{text-align:center;opacity:0.8;max-width:520px;line-height:1.6;}
 
 /* Nav */
-.nav{position:fixed;bottom:20px;width:100%;display:flex;justify-content:center;gap:20px;}
-.nav button{padding:12px 22px;border-radius:30px;background:linear-gradient(135deg,#6a5acd,#00bfff);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
-.nav button:hover{filter: brightness(1.2);}
-
-/* Inputs */
-input,select{padding:12px 15px;border-radius:25px;background:rgba(255,255,255,0.15);}
-textarea{width:260px;height:140px;padding:15px;border-radius:20px;background:rgba(255,255,255,0.1);resize:none;}
-#notes::placeholder{opacity:0.6;font-style:italic;}
+.nav{
+  position:fixed;
+  bottom:20px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+.nav button{
+  padding:12px 22px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#6a5acd,#00bfff);
+  color:white;
+}
 
 /* Todo */
-#todoInput{width:220px;margin-bottom:10px;}
-ul{margin-top:15px;list-style:none;padding-left:0;width:260px;}
-li{background:rgba(255,255,255,0.1);padding:10px 15px;border-radius:20px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;transition:0.3s;cursor:pointer;}
+input,select{
+  padding:12px 15px;
+  border-radius:25px;
+  background:rgba(255,255,255,0.15);
+}
+textarea{
+  width:260px;
+  height:140px;
+  padding:15px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.1);
+  resize:none;
+}
+ul{list-style:none;width:260px;}
+li{
+  background:rgba(255,255,255,0.1);
+  padding:10px 15px;
+  border-radius:20px;
+  margin:8px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 li.done{text-decoration:line-through;opacity:0.6;}
-li button{margin-left:5px;padding:5px 8px;border-radius:12px;font-size:0.85rem;background:rgba(255,255,255,0.25);}
-li:hover{background:rgba(255,255,255,0.2);}
+li button{
+  margin-left:5px;
+  padding:5px 8px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.25);
+}
 
 /* Timer */
-.time{font-size:2.5rem;font-weight:600;margin:15px 0;letter-spacing:1px;}
-.timer-controls{display:flex;gap:15px;margin-bottom:15px;}
-.timer-controls button{padding:10px 18px;border-radius:25px;background:linear-gradient(135deg,#ff7f50,#ff1493);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.25);}
-.timer-controls button:hover{filter: brightness(1.15);}
-#timerType{margin-bottom:15px;width:200px;}
+.time{font-size:2.5rem;font-weight:600;}
+.timer-controls{display:flex;gap:15px;}
+.timer-controls button{
+  padding:10px 18px;
+  border-radius:25px;
+  background:linear-gradient(135deg,#ff7f50,#ff1493);
+  color:white;
+}
 
-/* Fullscreen button */
-#fullscreenBtn{position:fixed;top:20px;right:20px;padding:10px 15px;border-radius:15px;background:linear-gradient(135deg,#00bfff,#6a5acd);color:white;z-index:9999;cursor:pointer;}
+/* Fullscreen */
+#fullscreenBtn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  padding:10px 15px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#00bfff,#6a5acd);
+  color:white;
+}
 </style>
 </head>
+
 <body>
 
 <div class="bg"></div>
 
-<!-- Fullscreen toggle -->
-<button id="fullscreenBtn">Fullscreen / PIP</button>
+<button id="fullscreenBtn">Fullscreen</button>
 
 <div class="container" id="slider">
 
-<!-- Page 0: Email Login -->
+<!-- Page 0 : Motivational Intro -->
 <section class="page">
-  <h1>Welcome! 👋</h1>
-  <p>Enter your email to continue and we’ll remember you.</p>
-  <input type="email" id="userEmail" placeholder="your.email@example.com" /><br><br>
-  <button onclick="login()">Continue</button>
+  <h1>You’re doing enough 🌙</h1>
+  <p>
+    Slow down. Take a breath.<br>
+    Not everything needs to be fixed today.<br>
+    You’re allowed to move at your own pace.
+  </p>
 </section>
 
-<!-- Page 1: Welcome -->
+<!-- Page 1 -->
 <section class="page">
-  <h1>Hey, slow down 🌙</h1>
-  <p>This is your gentle little space. Breathe. You're doing okay.</p>
+  <h1>Hey, slow down 🤍</h1>
+  <p>This is your gentle little space. You’re safe here.</p>
 </section>
 
-<!-- Page 2: Hydration -->
+<!-- Page 2 -->
 <section class="page">
   <h1>Hydration Check 💧</h1>
   <p>Did you drink water today?</p>
-  <button onclick="alert('Go drink some water now 💙')">Yes / No</button>
+  <button onclick="alert('Go drink some water 💙')">Okay</button>
 </section>
 
-<!-- Page 3: To-Do -->
+<!-- Page 3 -->
 <section class="page">
   <h1>Todo List ✨</h1>
   <input id="todoInput" placeholder="Write something…" />
@@ -88,45 +159,29 @@ li:hover{background:rgba(255,255,255,0.2);}
   <ul id="todoList"></ul>
 </section>
 
-<!-- Page 4: Timer -->
+<!-- Page 4 -->
 <section class="page">
   <h1>Timer ⏱️</h1>
-  <select id="timerType" onchange="switchTimer()">
-    <option value="stopwatch">Stopwatch</option>
-    <option value="pomodoro">Pomodoro</option>
-  </select>
 
-  <div id="stopwatchDiv">
-    <div class="time" id="time">00:00</div>
-    <div class="timer-controls">
-      <button onclick="start()">Start</button>
-      <button onclick="stop()">Stop</button>
-      <button onclick="reset()">Reset</button>
-    </div>
-  </div>
-
-  <div id="pomodoroDiv" style="display:none;">
-    <div class="time" id="pomodoroTime">25:00</div>
-    <div class="timer-controls">
-      <button onclick="startPomodoro()">Start</button>
-      <button onclick="stopPomodoro()">Stop</button>
-      <button onclick="resetPomodoro()">Reset</button>
-    </div>
-    <p id="pomodoroStatus" style="font-size:1.2rem;font-weight:600;">Work</p>
+  <div class="time" id="time">00:00</div>
+  <div class="timer-controls">
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button onclick="reset()">Reset</button>
   </div>
 </section>
 
-<!-- Page 5: Notes -->
+<!-- Page 5 -->
 <section class="page">
   <h1>Short Notes 📝</h1>
-  <textarea id="notes" placeholder="You're safe here…"></textarea>
+  <textarea id="notes" placeholder="You’re safe here…"></textarea>
 </section>
 
-<!-- Page 6: Outro -->
+<!-- Page 6 -->
 <section class="page">
-  <h1>That's it 🤍</h1>
-  <p>Be gentle with yourself. You don't have to win every day.</p>
-  <p style="margin-top:20px;opacity:0.6;">— by Eren</p>
+  <h1>That’s enough for today 🤍</h1>
+  <p>You don’t have to win every day. Showing up is enough.</p>
+  <p style="opacity:0.6;">— by Eren</p>
 </section>
 
 </div>
@@ -137,116 +192,89 @@ li:hover{background:rgba(255,255,255,0.2);}
 </div>
 
 <script>
-/* Background Particles */
+/* Background */
 const bg=document.querySelector('.bg');
-function createParticle(){const el=document.createElement('div');const isHeart=Math.random()>0.7;el.className=isHeart?'heart':'star';el.innerHTML=isHeart?'❤':'';el.style.left=Math.random()*100+'vw';el.style.animationDuration=(8+Math.random()*8)+'s';bg.appendChild(el);setTimeout(()=>el.remove(),16000);}
-setInterval(createParticle,300);
+setInterval(()=>{
+  const el=document.createElement('div');
+  el.className=Math.random()>0.7?'heart':'star';
+  el.innerHTML=el.className==='heart'?'❤':'';
+  el.style.left=Math.random()*100+'vw';
+  el.style.animationDuration=(8+Math.random()*8)+'s';
+  bg.appendChild(el);
+  setTimeout(()=>el.remove(),16000);
+},300);
 
 /* Slider */
 let index=0;
 const slider=document.getElementById('slider');
 function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
-function next(){
-  if(index===0&&!currentUser){ alert('Please enter a valid email!'); return; }
-  if(index<6){ index++; update(); saveData(); }
-}
-function prev(){ if(index>0){ index--; update(); saveData(); }}
+function next(){if(index<6){index++;update();saveData();}}
+function prev(){if(index>0){index--;update();saveData();}}
 
-/* Login */
-let currentUser=null;
-function login(){
-  const email=document.getElementById('userEmail').value.trim();
-  const pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(!email||!pattern.test(email)){ alert('Enter a valid email!'); return; }
-  currentUser=email;
-  if(!localStorage.getItem(currentUser)){
-    localStorage.setItem(currentUser,JSON.stringify({todos:[],stopwatch:0,pomodoro:{time:1500,status:'Work',running:false},notes:''}));
-  }
-  loadUserData(); alert('Welcome, '+currentUser); index++; update();
-}
-
-/* To-Do */
+/* Todo */
 const todoInput=document.getElementById('todoInput');
 const todoList=document.getElementById('todoList');
 function addTodo(){
-  if(!todoInput.value||!currentUser) return;
-  const li=document.createElement('li'); li.textContent=todoInput.value;
-  li.onclick=()=>{ li.classList.toggle('done'); saveData(); };
-  const editBtn=document.createElement('button'); editBtn.textContent='✏️';
-  editBtn.onclick=(e)=>{e.stopPropagation();const val=prompt('Edit Task',li.firstChild.textContent);if(val){li.textContent=val;li.appendChild(editBtn);li.appendChild(delBtn);saveData();}};
-  const delBtn=document.createElement('button'); delBtn.textContent='❌';
-  delBtn.onclick=(e)=>{e.stopPropagation();li.remove();saveData();};
-  li.appendChild(editBtn); li.appendChild(delBtn); todoList.appendChild(li);
-  todoInput.value=''; saveData();
+  if(!todoInput.value) return;
+  const li=document.createElement('li');
+  li.textContent=todoInput.value;
+  li.onclick=()=>li.classList.toggle('done');
+  const del=document.createElement('button');
+  del.textContent='❌';
+  del.onclick=e=>{e.stopPropagation();li.remove();saveData();}
+  li.appendChild(del);
+  todoList.appendChild(li);
+  todoInput.value='';
+  saveData();
 }
 
 /* Stopwatch */
 let t=0,timer=null;
-function start(){if(!timer){timer=setInterval(()=>{t++;render();saveData();},1000);}}
-function stop(){clearInterval(timer);timer=null;saveData();}
+function start(){if(!timer)timer=setInterval(()=>{t++;render();saveData();},1000);}
+function stop(){clearInterval(timer);timer=null;}
 function reset(){stop();t=0;render();saveData();}
-function render(){const m=String(Math.floor(t/60)).padStart(2,'0');const s=String(t%60).padStart(2,'0');document.getElementById('time').textContent=`${m}:${s}`;}
-
-/* Pomodoro */
-let pomodoroTimer=null,pomodoroTime=1500,pomodoroStatus='Work';
-function switchTimer(){const type=document.getElementById('timerType').value;
-document.getElementById('stopwatchDiv').style.display=(type==='stopwatch')?'block':'none';
-document.getElementById('pomodoroDiv').style.display=(type==='pomodoro')?'block':'none';}
-function startPomodoro(){if(!pomodoroTimer) pomodoroTimer=setInterval(runPomodoro,1000);}
-function stopPomodoro(){clearInterval(pomodoroTimer);pomodoroTimer=null;saveData();}
-function resetPomodoro(){stopPomodoro();pomodoroTime=1500;pomodoroStatus='Work';renderPomodoro();saveData();}
-function runPomodoro(){if(pomodoroTime>0){pomodoroTime--;renderPomodoro();saveData();}else{pomodoroStatus=(pomodoroStatus==='Work')?'Break':'Work';pomodoroTime=(pomodoroStatus==='Work')?1500:300;renderPomodoro();saveData();alert('Pomodoro '+pomodoroStatus+' started!');}}
-function renderPomodoro(){const m=String(Math.floor(pomodoroTime/60)).padStart(2,'0');const s=String(pomodoroTime%60).padStart(2,'0');document.getElementById('pomodoroTime').textContent=`${m}:${s}`;document.getElementById('pomodoroStatus').textContent=pomodoroStatus;}
+function render(){
+  document.getElementById('time').textContent=
+  String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
+}
 
 /* Notes */
-const notesArea=document.getElementById('notes');
+const notes=document.getElementById('notes');
 
-/* Save & Load */
+/* Save */
 function saveData(){
-  if(!currentUser) return;
-  const todos=[]; todoList.querySelectorAll('li').forEach(li=>{todos.push({text:li.firstChild.textContent,done:li.classList.contains('done')});});
-  localStorage.setItem(currentUser,JSON.stringify({todos:todos,stopwatch:t,pomodoro:{time:pomodoroTime,status:pomodoroStatus,running:!!pomodoroTimer},notes:notesArea.value}));
-}
-function loadUserData(){
-  if(!currentUser) return;
-  const data=JSON.parse(localStorage.getItem(currentUser));
-  // Todos
-  todoList.innerHTML='';data.todos.forEach(t=>{
-    const li=document.createElement('li');li.textContent=t.text;if(t.done) li.classList.add('done');
-    li.onclick=()=>{li.classList.toggle('done');saveData();};
-    const editBtn=document.createElement('button');editBtn.textContent='✏️';
-    editBtn.onclick=(e)=>{e.stopPropagation();const val=prompt('Edit Task',li.firstChild.textContent);if(val){li.textContent=val;li.appendChild(editBtn);li.appendChild(delBtn);saveData();}};
-    const delBtn=document.createElement('button');delBtn.textContent='❌';
-    delBtn.onclick=(e)=>{e.stopPropagation();li.remove();saveData();};
-    li.appendChild(editBtn);li.appendChild(delBtn);todoList.appendChild(li);
+  const todos=[];
+  todoList.querySelectorAll('li').forEach(li=>{
+    todos.push({text:li.firstChild.textContent,done:li.classList.contains('done')});
   });
-  t=data.stopwatch||0; render();
-  pomodoroTime=data.pomodoro.time; pomodoroStatus=data.pomodoro.status; renderPomodoro();
-  if(data.pomodoro.running) startPomodoro();
-  notesArea.value=data.notes||'';
+  localStorage.setItem('gentleSpace',JSON.stringify({
+    todos, time:t, notes:notes.value
+  }));
 }
-
-/* Auto-load last user */
-window.onload=function(){const keys=Object.keys(localStorage);if(keys.length>0){currentUser=keys[0];loadUserData();}};
+window.onload=()=>{
+  const d=JSON.parse(localStorage.getItem('gentleSpace')||'{}');
+  if(d.todos){
+    d.todos.forEach(t=>{
+      const li=document.createElement('li');
+      li.textContent=t.text;
+      if(t.done)li.classList.add('done');
+      li.onclick=()=>li.classList.toggle('done');
+      const del=document.createElement('button');
+      del.textContent='❌';
+      del.onclick=e=>{e.stopPropagation();li.remove();saveData();}
+      li.appendChild(del);
+      todoList.appendChild(li);
+    });
+  }
+  t=d.time||0; render();
+  notes.value=d.notes||'';
+}
 
 /* Fullscreen */
-const fsBtn = document.getElementById('fullscreenBtn');
-let isFullscreen = false;
-fsBtn.onclick = () => {
-  if(!isFullscreen){ openFullscreen(document.documentElement); } 
-  else { closeFullscreen(); }
-  isFullscreen = !isFullscreen;
+document.getElementById('fullscreenBtn').onclick=()=>{
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
 };
-function openFullscreen(elem) {
-  if (elem.requestFullscreen) { elem.requestFullscreen(); } 
-  else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); } 
-  else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
-}
-function closeFullscreen() {
-  if (document.exitFullscreen) { document.exitFullscreen(); } 
-  else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); } 
-  else if (document.msExitFullscreen) { document.msExitFullscreen(); }
-}
 </script>
 
 </body>
