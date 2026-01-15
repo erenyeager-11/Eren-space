@@ -7,6 +7,7 @@
 <title>Gentle Space 🌙</title>
 
 <style>
+/* === YOUR ORIGINAL CSS (UNCHANGED) === */
 :root{
   --bg:#05060c;
   --glass:rgba(255,255,255,.08);
@@ -15,162 +16,29 @@
   --text:#eef0ff;
   --muted:#a9acc7;
 }
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Poppins,system-ui,sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,system-ui,sans-serif;}
 body{
-  background:
-    radial-gradient(600px 300px at top,#1b2158,transparent),
-    var(--bg);
+  background:radial-gradient(600px 300px at top,#1b2158,transparent),var(--bg);
   color:var(--text);
   overflow:hidden;
 }
-
-/* ---------- NAV ---------- */
-.nav{
-  position:fixed;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:10px;
-  z-index:1000;
-}
-
-.nav button{
-  padding:10px 18px;
-  border-radius:999px;
-  background:var(--glass);
-  backdrop-filter:blur(10px);
-  color:white;
-  font-size:14px;
-}
-
-/* ---------- FULLSCREEN ---------- */
-#fsBtn{
-  position:fixed;
-  top:12px;
-  right:12px;
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  font-size:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
-}
-
-/* ---------- SLIDER ---------- */
-.container{
-  display:flex;
-  width:100%;
-  height:100dvh;
-  transition:transform .45s ease;
-}
-
-.page{
-  flex:0 0 100%;
-  height:100dvh;
-  padding:90px 18px 40px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:16px;
-  background:var(--glass);
-  backdrop-filter:blur(18px);
-}
-
-/* ---------- TEXT ---------- */
-h1{
-  font-size:clamp(1.5rem,6vw,2.2rem);
-  text-align:center;
-}
-
-p{
-  text-align:center;
-  color:var(--muted);
-  max-width:360px;
-}
-
-/* ---------- INPUTS ---------- */
-input,textarea,select{
-  width:100%;
-  max-width:340px;
-  padding:14px 18px;
-  border-radius:18px;
-  border:none;
-  outline:none;
-  background:rgba(255,255,255,.15);
-  color:white;
-  font-size:16px;
-}
-
-textarea{
-  min-height:160px;
-  resize:none;
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  font-weight:600;
-}
-
-/* ---------- TODO ---------- */
-ul{
-  list-style:none;
-  width:100%;
-  max-width:340px;
-}
-
-li{
-  background:rgba(255,255,255,.18);
-  padding:12px 14px;
-  border-radius:16px;
-  margin:8px 0;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:6px;
-}
-
-li.done{
-  text-decoration:line-through;
-  opacity:.6;
-}
-
-/* ---------- TIMER ---------- */
-.time{
-  font-size:clamp(2.2rem,8vw,3rem);
-}
-
-.timer-controls{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-
-.timer-controls button{
-  padding:12px 24px;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-}
-
-/* ---------- DESKTOP ---------- */
-@media(min-width:768px){
-  .page{padding:110px 60px}
-}
+.nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:1000;}
+.nav button{padding:10px 18px;border-radius:999px;background:var(--glass);backdrop-filter:blur(10px);color:white;font-size:14px;}
+#fsBtn{position:fixed;top:12px;right:12px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:1000;}
+.container{display:flex;width:100%;height:100dvh;transition:transform .45s ease;}
+.page{flex:0 0 100%;height:100dvh;padding:90px 18px 40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--glass);backdrop-filter:blur(18px);}
+h1{font-size:clamp(1.5rem,6vw,2.2rem);text-align:center;}
+p{text-align:center;color:var(--muted);max-width:360px;}
+input,textarea,select{width:100%;max-width:340px;padding:14px 18px;border-radius:18px;border:none;outline:none;background:rgba(255,255,255,.15);color:white;font-size:16px;}
+textarea{min-height:160px;resize:none;}
+button{border:none;cursor:pointer;font-weight:600;}
+ul{list-style:none;width:100%;max-width:340px;}
+li{background:rgba(255,255,255,.18);padding:12px 14px;border-radius:16px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;gap:6px;}
+li.done{text-decoration:line-through;opacity:.6;}
+.time{font-size:clamp(2.2rem,8vw,3rem);}
+.timer-controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.timer-controls button{padding:12px 24px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;}
+@media(min-width:768px){.page{padding:110px 60px}}
 </style>
 </head>
 
@@ -185,10 +53,7 @@ li.done{
 
 <div class="container" id="slider">
 
-<section class="page">
-  <h1>You’re doing enough 🌙</h1>
-  <p>Slow down. One step is enough.</p>
-</section>
+<section class="page"><h1>You’re doing enough 🌙</h1><p>Slow down. One step is enough.</p></section>
 
 <section class="page">
   <h1>Todo ✨</h1>
@@ -199,7 +64,6 @@ li.done{
 
 <section class="page">
   <h1>Timer ⏱️</h1>
-
   <select id="timerType" onchange="switchTimer()">
     <option value="stopwatch">Stopwatch</option>
     <option value="pomodoro">Pomodoro</option>
@@ -230,104 +94,85 @@ li.done{
   <textarea id="notes" placeholder="Write freely…"></textarea>
 </section>
 
-<section class="page">
-  <h1>Enough for today 🤍</h1>
-  <p>You showed up. That counts.</p>
-</section>
+<section class="page"><h1>Enough for today 🤍</h1><p>You showed up. That counts.</p></section>
 
 </div>
 
 <script>
-let index=0;
-const slider=document.getElementById("slider");
+/* ===== PERSISTENT STORAGE ===== */
+const save = () => localStorage.setItem("gentleSpace", JSON.stringify({
+  index, todos, notes: notes.value, sw, pm, timerType: timerType.value
+}));
 
-/* ---------- SLIDE ---------- */
-function update(){
-  slider.style.transform=`translateX(-${index*100}%)`;
-}
+const load = () => {
+  const d = JSON.parse(localStorage.getItem("gentleSpace") || "{}");
+  index = d.index || 0;
+  sw = d.sw || 0;
+  pm = d.pm || 0;
+  timerType.value = d.timerType || "stopwatch";
+  notes.value = d.notes || "";
+  todos = d.todos || [];
+  renderTodos();
+  switchTimer();
+  renderSW();
+  renderPM();
+  update();
+};
+
+/* ---------- SLIDER ---------- */
+let index = 0;
+const slider = document.getElementById("slider");
+function update(){ slider.style.transform = `translateX(-${index*100}%)`; save(); }
 function next(){ if(index<4){index++;update();} }
 function prev(){ if(index>0){index--;update();} }
 
-/* ---------- TOUCH SWIPE (MOBILE FIX) ---------- */
-let startX=0;
-slider.addEventListener("touchstart",e=>{
-  startX=e.touches[0].clientX;
-},{passive:true});
-
-slider.addEventListener("touchend",e=>{
-  const dx=e.changedTouches[0].clientX-startX;
-  if(dx>60) prev();
-  if(dx<-60) next();
-});
-
-/* ---------- FULLSCREEN ---------- */
-const fsBtn=document.getElementById("fsBtn");
-fsBtn.onclick=()=>{
-  if(!document.fullscreenElement){
-    document.documentElement.requestFullscreen();
-    fsBtn.textContent="✕";
-  }else{
-    document.exitFullscreen();
-    fsBtn.textContent="⛶";
-  }
-};
-
 /* ---------- TODO ---------- */
+let todos=[];
+function renderTodos(){
+  todoList.innerHTML="";
+  todos.forEach((t,i)=>{
+    const li=document.createElement("li");
+    if(t.done) li.classList.add("done");
+    li.innerHTML=`<span>${t.text}</span><button>✏️</button><button>❌</button>`;
+    li.children[0].onclick=()=>{t.done=!t.done;renderTodos();save();}
+    li.children[1].onclick=()=>{const x=prompt("Edit",t.text);if(x){t.text=x;renderTodos();save();}}
+    li.children[2].onclick=()=>{todos.splice(i,1);renderTodos();save();}
+    todoList.appendChild(li);
+  });
+}
 function addTodo(){
   if(!todoInput.value) return;
-  const li=document.createElement("li");
-  li.innerHTML=`<span>${todoInput.value}</span>
-                <button>✏️</button>
-                <button>❌</button>`;
-  li.children[0].onclick=()=>li.classList.toggle("done");
-  li.children[1].onclick=()=>{
-    const x=prompt("Edit",li.children[0].textContent);
-    if(x) li.children[0].textContent=x;
-  };
-  li.children[2].onclick=()=>li.remove();
-  todoList.appendChild(li);
+  todos.push({text:todoInput.value,done:false});
   todoInput.value="";
+  renderTodos(); save();
 }
 
 /* ---------- TIMER ---------- */
 let sw=0,swTimer=null;
-function swStart(){ if(!swTimer) swTimer=setInterval(()=>{sw++;renderSW();},1000); }
+function swStart(){ if(!swTimer) swTimer=setInterval(()=>{sw++;renderSW();save();},1000); }
 function swStop(){ clearInterval(swTimer); swTimer=null; }
-function swReset(){ swStop(); sw=0; renderSW(); }
-function renderSW(){
-  swTime.textContent=
-    String(Math.floor(sw/60)).padStart(2,"0")+":"+
-    String(sw%60).padStart(2,"0");
-}
+function swReset(){ swStop(); sw=0; renderSW(); save(); }
+function renderSW(){ swTime.textContent=String(Math.floor(sw/60)).padStart(2,"0")+":"+String(sw%60).padStart(2,"0"); }
 
 let pm=0,pmTimer=null;
 function pmStart(){
   if(pmTimer) return;
-  if(pm<=0){
-    pm=(+pmInput.value||0)*60;
-    if(pm<=0) return alert("Enter minutes");
-  }
-  pmTimer=setInterval(()=>{
-    pm--;
-    renderPM();
-    if(pm<=0) pmStop();
-  },1000);
+  if(pm<=0) pm=(+pmInput.value||0)*60;
+  if(pm<=0) return alert("Enter minutes");
+  pmTimer=setInterval(()=>{pm--;renderPM();save();if(pm<=0) pmStop();},1000);
 }
 function pmStop(){ clearInterval(pmTimer); pmTimer=null; }
-function pmReset(){ pmStop(); pm=0; renderPM(); }
-function renderPM(){
-  pmTime.textContent=
-    String(Math.floor(pm/60)).padStart(2,"0")+":"+
-    String(pm%60).padStart(2,"0");
-}
+function pmReset(){ pmStop(); pm=0; renderPM(); save(); }
+function renderPM(){ pmTime.textContent=String(Math.floor(pm/60)).padStart(2,"0")+":"+String(pm%60).padStart(2,"0"); }
 
 function switchTimer(){
-  const t=timerType.value;
-  stopwatchDiv.style.display=t==="stopwatch"?"block":"none";
-  pomodoroDiv.style.display=t==="pomodoro"?"block":"none";
+  stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
+  pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
+  save();
 }
 
-update();
+notes.addEventListener("input",save);
+window.addEventListener("load",load);
 </script>
 
 </body>
