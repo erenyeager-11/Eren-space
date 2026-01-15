@@ -1,74 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gentle Space 🌙</title>
 
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0b0d18">
-
 <style>
+:root{
+  --bg1:#0b0e1a;
+  --bg2:#14182e;
+  --glass:rgba(255,255,255,0.06);
+  --glow:#7aa2ff;
+  --accent:#ff7aa8;
+  --text:#f2f3f7;
+  --muted:#b6b8c6;
+}
+
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  -webkit-tap-highlight-color:transparent;
+  font-family:"Poppins",system-ui,sans-serif;
 }
 
 body{
-  min-height:100svh;
-  overflow-x:hidden;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 20% 10%,rgba(120,120,255,.12),transparent 40%),
-    radial-gradient(circle at 80% 80%,rgba(255,120,200,.08),transparent 40%),
-    #0b0d18;
-  color:#fff;
+    radial-gradient(1200px 600px at top, #1a1f4d, transparent),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
 }
 
+/* ---------- GLOBAL ---------- */
 button{
   border:none;
   cursor:pointer;
   font-weight:600;
-  background:linear-gradient(135deg,#6a5acd,#00bfff);
-  color:white;
-  padding:10px 18px;
-  border-radius:25px;
 }
 
 input,textarea,select{
+  width:100%;
+  max-width:340px;
   border:none;
   outline:none;
-  background:rgba(255,255,255,.12);
-  color:white;
-  padding:12px;
+  background:rgba(255,255,255,0.12);
+  color:var(--text);
+  padding:14px 18px;
   border-radius:18px;
   font-size:15px;
 }
 
-.container{
-  width:500vw;
-  display:flex;
-  transition:transform .5s ease;
+textarea{
+  min-height:180px;
+  resize:none;
 }
 
-.page{
-  width:100vw;
-  min-height:100svh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-  padding:90px 20px 40px;
-  backdrop-filter:blur(16px);
-}
-
-h1{text-align:center;font-size:2rem}
-p{text-align:center;opacity:.75}
-
+/* ---------- NAV ---------- */
 .nav{
   position:fixed;
   top:14px;
@@ -79,58 +67,127 @@ p{text-align:center;opacity:.75}
   z-index:1000;
 }
 
-#fsBtn,#focusBtn{
+.nav button{
+  padding:8px 16px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(10px);
+  color:var(--text);
+}
+
+/* ---------- FULLSCREEN ---------- */
+#fsBtn{
   position:fixed;
   top:14px;
   right:14px;
   padding:8px 14px;
   border-radius:16px;
-  font-size:.85rem;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  color:var(--text);
+  z-index:1000;
 }
 
-#focusBtn{
-  right:110px;
-  background:linear-gradient(135deg,#ff7f50,#ff1493);
+/* ---------- SLIDER ---------- */
+.container{
+  width:500vw;
+  display:flex;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
 }
 
-ul{list-style:none;width:260px}
+.page{
+  width:100vw;
+  min-height:100vh;
+  padding:90px 20px 40px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+}
+
+/* ---------- TEXT ---------- */
+h1{
+  font-size:clamp(1.6rem,4vw,2.4rem);
+  text-align:center;
+  text-shadow:0 0 30px rgba(122,162,255,0.25);
+}
+
+p{
+  text-align:center;
+  color:var(--muted);
+  max-width:420px;
+  line-height:1.6;
+}
+
+/* ---------- TODO ---------- */
+ul{
+  list-style:none;
+  width:100%;
+  max-width:340px;
+}
+
 li{
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,0.14);
   padding:10px 14px;
-  border-radius:18px;
+  border-radius:16px;
   margin:8px 0;
   display:flex;
+  align-items:center;
   justify-content:space-between;
   gap:6px;
 }
-li.done{text-decoration:line-through;opacity:.6}
 
-.time{font-size:2.6rem;font-weight:600}
+li.done{
+  text-decoration:line-through;
+  opacity:.55;
+}
+
+li button{
+  background:transparent;
+  font-size:14px;
+}
+
+/* ---------- TIMER ---------- */
+.time{
+  font-size:clamp(2rem,6vw,3rem);
+  font-weight:600;
+  text-shadow:0 0 25px rgba(255,122,168,0.35);
+}
 
 .timer-controls{
   display:flex;
-  gap:10px;
+  gap:12px;
   flex-wrap:wrap;
   justify-content:center;
 }
 
-@media(max-width:768px){
-  h1{font-size:1.6rem}
-  input,textarea,select{width:100%;max-width:320px}
-  textarea{min-height:150px}
+.timer-controls button{
+  padding:10px 20px;
+  border-radius:22px;
+  background:linear-gradient(135deg,var(--glow),var(--accent));
+  color:#fff;
+}
+
+/* ---------- DESKTOP ---------- */
+@media (min-width:768px){
+  .page{
+    padding:100px 60px 60px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="nav" id="nav">
-  <button onclick="prev()">← Back</button>
-  <button onclick="next()">Next →</button>
+<div class="nav">
+  <button onclick="prev()">←</button>
+  <button onclick="next()">→</button>
 </div>
 
-<button id="focusBtn">Focus</button>
-<button id="fsBtn">Fullscreen</button>
+<button id="fsBtn">⛶</button>
 
 <div class="container" id="slider">
 
@@ -141,18 +198,36 @@ li.done{text-decoration:line-through;opacity:.6}
 
 <section class="page">
   <h1>Todo ✨</h1>
-  <input id="todoInput" placeholder="Write something…">
+  <input id="todoInput" placeholder="Write something…" />
   <button onclick="addTodo()">Add</button>
   <ul id="todoList"></ul>
 </section>
 
 <section class="page">
   <h1>Timer ⏱️</h1>
-  <div class="time" id="swTime">00:00</div>
-  <div class="timer-controls">
-    <button onclick="swStart()">Start</button>
-    <button onclick="swStop()">Stop</button>
-    <button onclick="swReset()">Reset</button>
+
+  <select id="timerType" onchange="switchTimer()">
+    <option value="stopwatch">Stopwatch</option>
+    <option value="pomodoro">Pomodoro</option>
+  </select>
+
+  <div id="stopwatchDiv">
+    <div class="time" id="swTime">00:00</div>
+    <div class="timer-controls">
+      <button onclick="swStart()">Start</button>
+      <button onclick="swStop()">Stop</button>
+      <button onclick="swReset()">Reset</button>
+    </div>
+  </div>
+
+  <div id="pomodoroDiv" style="display:none">
+    <input id="pmInput" type="number" min="1" placeholder="Minutes" />
+    <div class="time" id="pmTime">00:00</div>
+    <div class="timer-controls">
+      <button onclick="pmStart()">Start</button>
+      <button onclick="pmStop()">Stop</button>
+      <button onclick="pmReset()">Reset</button>
+    </div>
   </div>
 </section>
 
@@ -170,77 +245,72 @@ li.done{text-decoration:line-through;opacity:.6}
 </div>
 
 <script>
-let index=0,focus=false;
-const slider=document.getElementById("slider");
-const nav=document.getElementById("nav");
+let index=0;
+const slider=document.getElementById('slider');
 
-function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
-function next(){if(!focus&&index<4){index++;update();save();}}
-function prev(){if(!focus&&index>0){index--;update();save();}}
+function update(){
+  slider.style.transform=`translateX(-${index*100}vw)`;
+}
+function next(){ if(index<4){index++;update();save();} }
+function prev(){ if(index>0){index--;update();save();} }
 
-fsBtn.onclick=()=>!document.fullscreenElement?
-document.documentElement.requestFullscreen():document.exitFullscreen();
-
-focusBtn.onclick=()=>{
-  if(!focus && confirm("Lock into focus mode?")){
-    focus=true;
-    nav.style.display="none";
-    focusBtn.textContent="Focused";
-    document.body.style.overflow="hidden";
-  }
+/* FULLSCREEN */
+fsBtn.onclick=()=>{
+  document.fullscreenElement
+    ? document.exitFullscreen()
+    : document.documentElement.requestFullscreen();
 };
 
-const todoInput=document.getElementById("todoInput");
-const todoList=document.getElementById("todoList");
-
+/* TODO */
 function addTodo(){
-  if(!todoInput.value)return;
-  const li=document.createElement("li");
-  li.innerHTML=`<span>${todoInput.value}</span><button>❌</button>`;
-  li.onclick=()=>{li.classList.toggle("done");save();}
-  li.querySelector("button").onclick=e=>{e.stopPropagation();li.remove();save();}
+  if(!todoInput.value) return;
+  const li=document.createElement('li');
+  li.innerHTML=`<span>${todoInput.value}</span>
+    <button>✏️</button><button>❌</button>`;
+  li.children[0].onclick=()=>{li.classList.toggle('done');save();}
+  li.children[1].onclick=()=>{
+    const x=prompt("Edit task",li.children[0].textContent);
+    if(x){li.children[0].textContent=x;save();}
+  }
+  li.children[2].onclick=()=>{li.remove();save();}
   todoList.appendChild(li);
-  todoInput.value="";
+  todoInput.value='';
   save();
 }
 
-let sw=0,timer=null;
-function swStart(){if(!timer)timer=setInterval(()=>{sw++;render();save();},1000);}
-function swStop(){clearInterval(timer);timer=null;}
-function swReset(){swStop();sw=0;render();save();}
-function render(){
-  swTime.textContent=
-  String(Math.floor(sw/60)).padStart(2,"0")+":"+
-  String(sw%60).padStart(2,"0");
+/* TIMER */
+let sw=0,swTimer=null;
+function swStart(){if(!swTimer)swTimer=setInterval(()=>{sw++;renderSW();},1000);}
+function swStop(){clearInterval(swTimer);swTimer=null;}
+function swReset(){swStop();sw=0;renderSW();}
+function renderSW(){swTime.textContent=
+  String(Math.floor(sw/60)).padStart(2,'0')+':'+String(sw%60).padStart(2,'0');}
+
+let pm=0,pmTimer=null;
+function pmStart(){
+  if(pmTimer) return;
+  if(pm<=0){pm=(+pmInput.value||0)*60;}
+  if(pm<=0) return alert("Enter minutes");
+  pmTimer=setInterval(()=>{
+    pm--;renderPM();
+    if(pm<=0)pmStop();
+  },1000);
+}
+function pmStop(){clearInterval(pmTimer);pmTimer=null;}
+function pmReset(){pmStop();pm=0;renderPM();}
+function renderPM(){pmTime.textContent=
+  String(Math.floor(pm/60)).padStart(2,'0')+':'+String(pm%60).padStart(2,'0');}
+
+function switchTimer(){
+  stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
+  pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
 }
 
 function save(){
-  const todos=[...todoList.children].map(li=>({
-    t:li.querySelector("span").textContent,
-    d:li.classList.contains("done")
-  }));
-  localStorage.setItem("gs",JSON.stringify({index,sw,notes:notes.value,todos}));
+  localStorage.setItem("gentleIndex",index);
 }
-
-onload=()=>{
-  const d=JSON.parse(localStorage.getItem("gs")||"{}");
-  index=d.index||0;update();
-  sw=d.sw||0;render();
-  notes.value=d.notes||"";
-  (d.todos||[]).forEach(x=>{
-    const li=document.createElement("li");
-    li.innerHTML=`<span>${x.t}</span><button>❌</button>`;
-    if(x.d)li.classList.add("done");
-    li.onclick=()=>{li.classList.toggle("done");save();}
-    li.querySelector("button").onclick=e=>{e.stopPropagation();li.remove();save();}
-    todoList.appendChild(li);
-  });
-};
-
-// service worker
-if("serviceWorker"in navigator){
-  navigator.serviceWorker.register("sw.js");
-}
+index=+localStorage.getItem("gentleIndex")||0;
+update();
 </script>
 
 </body>
