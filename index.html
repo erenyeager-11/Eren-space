@@ -2,45 +2,56 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Gentle Space 🌙</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0d18">
 
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Poppins,sans-serif
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
   min-height:100svh;
   overflow-x:hidden;
-  background:radial-gradient(circle at top,#1b1f3b,#07080f);
+  background:
+    radial-gradient(circle at 20% 10%,rgba(120,120,255,.12),transparent 40%),
+    radial-gradient(circle at 80% 80%,rgba(255,120,200,.08),transparent 40%),
+    #0b0d18;
   color:#fff;
 }
 
 button{
   border:none;
   cursor:pointer;
-  font-weight:600
+  font-weight:600;
+  background:linear-gradient(135deg,#6a5acd,#00bfff);
+  color:white;
+  padding:10px 18px;
+  border-radius:25px;
 }
 
 input,textarea,select{
   border:none;
   outline:none;
-  background:rgba(255,255,255,.15);
+  background:rgba(255,255,255,.12);
   color:white;
   padding:12px;
-  border-radius:20px;
-  font-size:16px;
+  border-radius:18px;
+  font-size:15px;
 }
 
-/* SLIDER */
 .container{
   width:500vw;
   display:flex;
-  transition:transform .6s ease;
+  transition:transform .5s ease;
 }
 
 .page{
@@ -51,118 +62,74 @@ input,textarea,select{
   align-items:center;
   justify-content:center;
   gap:15px;
-  padding:80px 40px 40px; /* top space for nav */
-  backdrop-filter:blur(18px);
-  background:rgba(255,255,255,.05);
+  padding:90px 20px 40px;
+  backdrop-filter:blur(16px);
 }
 
-/* TEXT */
-h1{text-align:center;font-size:2.2rem}
-p{text-align:center;opacity:.8}
+h1{text-align:center;font-size:2rem}
+p{text-align:center;opacity:.75}
 
-/* NAV (TOP) */
 .nav{
   position:fixed;
-  top:15px;
+  top:14px;
   left:50%;
   transform:translateX(-50%);
   display:flex;
-  gap:14px;
+  gap:10px;
   z-index:1000;
 }
 
-.nav button{
-  padding:10px 18px;
-  border-radius:25px;
-  background:linear-gradient(135deg,#6a5acd,#00bfff);
-  color:white;
-  font-size:.9rem;
-}
-
-/* FULLSCREEN */
-#fsBtn{
+#fsBtn,#focusBtn{
   position:fixed;
-  top:15px;
-  right:15px;
-  padding:8px 12px;
-  border-radius:15px;
-  background:linear-gradient(135deg,#ff7f50,#ff1493);
-  color:white;
-  z-index:1000;
+  top:14px;
+  right:14px;
+  padding:8px 14px;
+  border-radius:16px;
   font-size:.85rem;
 }
 
-/* TODO */
-ul{
-  list-style:none;
-  width:260px
+#focusBtn{
+  right:110px;
+  background:linear-gradient(135deg,#ff7f50,#ff1493);
 }
 
+ul{list-style:none;width:260px}
 li{
   background:rgba(255,255,255,.12);
-  padding:10px 15px;
-  border-radius:20px;
+  padding:10px 14px;
+  border-radius:18px;
   margin:8px 0;
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  gap:6px
+  gap:6px;
 }
+li.done{text-decoration:line-through;opacity:.6}
 
-li.done{
-  text-decoration:line-through;
-  opacity:.6
-}
-
-li button{
-  padding:5px 8px;
-  border-radius:12px;
-  background:rgba(255,255,255,.3)
-}
-
-/* TIMER */
-.time{
-  font-size:2.6rem;
-  font-weight:600
-}
+.time{font-size:2.6rem;font-weight:600}
 
 .timer-controls{
   display:flex;
-  gap:12px;
+  gap:10px;
   flex-wrap:wrap;
-  justify-content:center
+  justify-content:center;
 }
 
-.timer-controls button{
-  padding:10px 18px;
-  border-radius:25px;
-  background:linear-gradient(135deg,#ff7f50,#ff1493);
-  color:white
-}
-
-/* MOBILE */
-@media (max-width:768px){
+@media(max-width:768px){
   h1{font-size:1.6rem}
-  p{font-size:.95rem}
-
-  input,textarea,select{
-    width:100%;
-    max-width:320px
-  }
-
-  textarea{min-height:160px}
-  ul{max-width:320px}
+  input,textarea,select{width:100%;max-width:320px}
+  textarea{min-height:150px}
 }
 </style>
 </head>
 
 <body>
 
-<div class="nav">
+<div class="nav" id="nav">
   <button onclick="prev()">← Back</button>
   <button onclick="next()">Next →</button>
 </div>
 
+<button id="focusBtn">Focus</button>
 <button id="fsBtn">Fullscreen</button>
 
 <div class="container" id="slider">
@@ -174,36 +141,18 @@ li button{
 
 <section class="page">
   <h1>Todo ✨</h1>
-  <input id="todoInput" placeholder="Write something…" />
+  <input id="todoInput" placeholder="Write something…">
   <button onclick="addTodo()">Add</button>
   <ul id="todoList"></ul>
 </section>
 
 <section class="page">
   <h1>Timer ⏱️</h1>
-
-  <select id="timerType" onchange="switchTimer()">
-    <option value="stopwatch">Stopwatch</option>
-    <option value="pomodoro">Pomodoro</option>
-  </select>
-
-  <div id="stopwatchDiv">
-    <div class="time" id="swTime">00:00</div>
-    <div class="timer-controls">
-      <button onclick="swStart()">Start</button>
-      <button onclick="swStop()">Stop</button>
-      <button onclick="swReset()">Reset</button>
-    </div>
-  </div>
-
-  <div id="pomodoroDiv" style="display:none">
-    <input id="pmInput" type="number" min="1" placeholder="Minutes (eg 45)" />
-    <div class="time" id="pmTime">00:00</div>
-    <div class="timer-controls">
-      <button onclick="pmStart()">Start</button>
-      <button onclick="pmStop()">Stop</button>
-      <button onclick="pmReset()">Reset</button>
-    </div>
+  <div class="time" id="swTime">00:00</div>
+  <div class="timer-controls">
+    <button onclick="swStart()">Start</button>
+    <button onclick="swStop()">Stop</button>
+    <button onclick="swReset()">Reset</button>
   </div>
 </section>
 
@@ -215,117 +164,83 @@ li button{
 <section class="page">
   <h1>Enough for today 🤍</h1>
   <p>You showed up. That counts.</p>
-  <p style="opacity:.6">— by Eren</p>
+  <p style="opacity:.5">— by Eren</p>
 </section>
 
 </div>
 
 <script>
-let index=0;
-const slider=document.getElementById('slider');
+let index=0,focus=false;
+const slider=document.getElementById("slider");
+const nav=document.getElementById("nav");
 
-function update(){
-  slider.style.transform=`translateX(-${index*100}vw)`;
-}
+function update(){slider.style.transform=`translateX(-${index*100}vw)`;}
+function next(){if(!focus&&index<4){index++;update();save();}}
+function prev(){if(!focus&&index>0){index--;update();save();}}
 
-function next(){ if(index<4){index++;update();save();} }
-function prev(){ if(index>0){index--;update();save();} }
+fsBtn.onclick=()=>!document.fullscreenElement?
+document.documentElement.requestFullscreen():document.exitFullscreen();
 
-/* FULLSCREEN */
-document.getElementById('fsBtn').onclick=()=>{
-  if(!document.fullscreenElement)
-    document.documentElement.requestFullscreen();
-  else document.exitFullscreen();
+focusBtn.onclick=()=>{
+  if(!focus && confirm("Lock into focus mode?")){
+    focus=true;
+    nav.style.display="none";
+    focusBtn.textContent="Focused";
+    document.body.style.overflow="hidden";
+  }
 };
 
-/* TODO */
-const todoInput=document.getElementById('todoInput');
-const todoList=document.getElementById('todoList');
+const todoInput=document.getElementById("todoInput");
+const todoList=document.getElementById("todoList");
 
 function addTodo(){
-  if(!todoInput.value) return;
-  const li=document.createElement('li');
-  const span=document.createElement('span');
-  span.textContent=todoInput.value;
-  span.onclick=()=>{li.classList.toggle('done');save();};
-
-  const e=document.createElement('button');
-  e.textContent='✏️';
-  e.onclick=()=>{const x=prompt('Edit task',span.textContent);if(x){span.textContent=x;save();}};
-
-  const d=document.createElement('button');
-  d.textContent='❌';
-  d.onclick=()=>{li.remove();save();};
-
-  li.append(span,e,d);
+  if(!todoInput.value)return;
+  const li=document.createElement("li");
+  li.innerHTML=`<span>${todoInput.value}</span><button>❌</button>`;
+  li.onclick=()=>{li.classList.toggle("done");save();}
+  li.querySelector("button").onclick=e=>{e.stopPropagation();li.remove();save();}
   todoList.appendChild(li);
-  todoInput.value='';
+  todoInput.value="";
   save();
 }
 
-/* TIMER */
-let sw=0,swTimer=null;
-function swStart(){if(!swTimer)swTimer=setInterval(()=>{sw++;renderSW();save();},1000);}
-function swStop(){clearInterval(swTimer);swTimer=null;}
-function swReset(){swStop();sw=0;renderSW();save();}
-function renderSW(){swTime.textContent=String(Math.floor(sw/60)).padStart(2,'0')+':'+String(sw%60).padStart(2,'0');}
-
-let pm=0,pmTimer=null;
-const bell=new Audio("https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg");
-
-function pmStart(){
-  if(pmTimer) return;
-  if(pm<=0){
-    const m=parseInt(pmInput.value);
-    if(!m) return alert('Enter minutes');
-    pm=m*60;
-  }
-  pmTimer=setInterval(()=>{
-    pm--;
-    if(pm<=0){bell.play();pmStop();}
-    renderPM();save();
-  },1000);
-}
-function pmStop(){clearInterval(pmTimer);pmTimer=null;}
-function pmReset(){pmStop();pm=0;renderPM();save();}
-function renderPM(){pmTime.textContent=String(Math.floor(pm/60)).padStart(2,'0')+':'+String(pm%60).padStart(2,'0');}
-
-function switchTimer(){
-  const t=timerType.value;
-  stopwatchDiv.style.display=t==='stopwatch'?'block':'none';
-  pomodoroDiv.style.display=t==='pomodoro'?'block':'none';
+let sw=0,timer=null;
+function swStart(){if(!timer)timer=setInterval(()=>{sw++;render();save();},1000);}
+function swStop(){clearInterval(timer);timer=null;}
+function swReset(){swStop();sw=0;render();save();}
+function render(){
+  swTime.textContent=
+  String(Math.floor(sw/60)).padStart(2,"0")+":"+
+  String(sw%60).padStart(2,"0");
 }
 
-/* SAVE */
-const notes=document.getElementById('notes');
 function save(){
-  const todos=[];
-  todoList.querySelectorAll('li').forEach(li=>{
-    todos.push({text:li.querySelector('span').textContent,done:li.classList.contains('done')});
-  });
-  localStorage.setItem('gentleSpace',JSON.stringify({index,sw,pm,notes:notes.value,todos}));
+  const todos=[...todoList.children].map(li=>({
+    t:li.querySelector("span").textContent,
+    d:li.classList.contains("done")
+  }));
+  localStorage.setItem("gs",JSON.stringify({index,sw,notes:notes.value,todos}));
 }
 
-window.onload=()=>{
-  const d=JSON.parse(localStorage.getItem('gentleSpace')||'{}');
+onload=()=>{
+  const d=JSON.parse(localStorage.getItem("gs")||"{}");
   index=d.index||0;update();
-  sw=d.sw||0;renderSW();
-  pm=d.pm||0;renderPM();
-  notes.value=d.notes||'';
-  (d.todos||[]).forEach(t=>{
-    const li=document.createElement('li');
-    if(t.done)li.classList.add('done');
-    const s=document.createElement('span');
-    s.textContent=t.text;
-    s.onclick=()=>{li.classList.toggle('done');save();};
-    const e=document.createElement('button');e.textContent='✏️';
-    e.onclick=()=>{const x=prompt('Edit task',s.textContent);if(x){s.textContent=x;save();}};
-    const dlt=document.createElement('button');dlt.textContent='❌';
-    dlt.onclick=()=>{li.remove();save();};
-    li.append(s,e,dlt);
+  sw=d.sw||0;render();
+  notes.value=d.notes||"";
+  (d.todos||[]).forEach(x=>{
+    const li=document.createElement("li");
+    li.innerHTML=`<span>${x.t}</span><button>❌</button>`;
+    if(x.d)li.classList.add("done");
+    li.onclick=()=>{li.classList.toggle("done");save();}
+    li.querySelector("button").onclick=e=>{e.stopPropagation();li.remove();save();}
     todoList.appendChild(li);
   });
 };
+
+// service worker
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 
 </body>
