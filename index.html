@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Gentle Space 🌙</title>
 
 <style>
@@ -11,7 +10,7 @@
   --bg:#0b0a08;
   --gold1:#c6a96b;
   --gold2:#8f7440;
-  --glass:rgba(255,255,255,.06);
+  --glass:rgba(255,255,255,.08);
   --text:#f4f1e8;
   --muted:#b8b4a6;
 }
@@ -23,11 +22,11 @@
   font-family:Poppins,system-ui,sans-serif;
 }
 
-/* 🔥 Premium toned gold background */
 body{
   background: radial-gradient(circle at top,#2b2416,#0b0a08 70%);
   color:var(--text);
   overflow-x:hidden;
+  touch-action: pan-y;
 }
 
 /* ---------- NAV ---------- */
@@ -42,11 +41,12 @@ body{
 }
 
 .nav button{
-  padding:10px 18px;
+  padding:8px 14px;
   border-radius:999px;
   background:var(--glass);
   color:white;
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(6px);
+  font-size:0.9rem;
 }
 
 /* ---------- FULLSCREEN ---------- */
@@ -54,8 +54,8 @@ body{
   position:fixed;
   top:12px;
   right:12px;
-  width:46px;
-  height:46px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   border:none;
   background:linear-gradient(135deg,var(--gold1),var(--gold2));
@@ -69,37 +69,38 @@ body{
   display:flex;
   width:100%;
   min-height:100vh;
-  transition:transform .4s ease;
+  transition:transform .3s ease;
+  scroll-behavior: smooth;
 }
 
 .page{
   flex:0 0 100%;
   min-height:100vh;
-  padding:100px 18px 80px;
+  padding:90px 16px 70px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:18px;
+  gap:16px;
   background:var(--glass);
-  backdrop-filter:blur(16px);
-
+  backdrop-filter:blur(12px);
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
 }
 
 /* ---------- TEXT ---------- */
-h1{font-size:clamp(1.5rem,6vw,2.2rem);}
+h1{font-size:clamp(1.5rem,5vw,2rem);}
 p{color:var(--muted);text-align:center;}
 
 /* ---------- INPUTS ---------- */
 input,textarea,select{
   width:100%;
-  max-width:340px;
-  padding:12px;
-  border-radius:14px;
+  max-width:320px;
+  padding:10px;
+  border-radius:12px;
   border:none;
   background:rgba(255,255,255,.1);
   color:white;
+  font-size:0.95rem;
 }
 
 /* ---------- BUTTONS ---------- */
@@ -107,54 +108,71 @@ button{
   cursor:pointer;
   border:none;
   font-weight:600;
-  transition:.25s;
+  transition:.2s;
 }
 
 .timer-controls button,
 .sound-btn,
 .addBtn{
-  padding:12px 22px;
+  padding:10px 18px;
   border-radius:999px;
   background:linear-gradient(135deg,var(--gold1),var(--gold2));
   color:black;
+  font-size:0.9rem;
 }
 
 button:hover{
-  transform:scale(1.06);
+  transform:scale(1.05);
 }
 
 /* ---------- TODO ---------- */
 ul{
   list-style:none;
   width:100%;
-  max-width:340px;
+  max-width:320px;
 }
 
 li{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:10px;
-  margin:6px 0;
+  padding:8px;
+  margin:4px 0;
   border-radius:12px;
   background:rgba(255,255,255,.1);
 }
 
-.todoBtns button{margin-left:6px;}
+.todoBtns button{margin-left:6px;font-size:0.85rem;}
 
 /* ---------- TIMER ---------- */
-.time{font-size:2.8rem;}
+.time{font-size:2rem;}
 
 /* ---------- SOUND ---------- */
 .soundWrap{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
+  gap:8px;
   justify-content:center;
+}
+
+/* ---------- NOTES ---------- */
+textarea{
+  min-height:200px;
+  resize:none;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:500px){
+  .page{
+    padding:70px 12px 60px;
+  }
+  h1{font-size:clamp(1.2rem,6vw,1.8rem);}
+  .time{font-size:1.8rem;}
+  .nav button{padding:6px 12px;font-size:0.8rem;}
+  #fsBtn{width:38px;height:38px;font-size:16px;}
 }
 </style>
 </head>
-
 <body>
 
 <div class="nav">
@@ -179,7 +197,6 @@ li{
 </section>
 
 <section class="page">
-
 <h1>Timer ⏱️</h1>
 
 <select id="timerType" onchange="switchTimer()">
@@ -213,6 +230,9 @@ li{
 <button class="sound-btn" onclick="playSound(3)">Firewood</button>
 </div>
 
+<!-- PIP-ready video placeholder -->
+<video id="pipVideo" style="display:none;" src="video.mp4" controls></video>
+
 </section>
 
 <section class="page">
@@ -225,135 +245,69 @@ li{
 /* ---------- SLIDER ---------- */
 let index=0;
 const slider=document.getElementById("slider");
-
-function update(){
-slider.style.transform=`translateX(-${index*100}%)`;
-}
-
+function update(){slider.style.transform=`translateX(-${index*100}%)`;}
 function next(){ if(index<3){index++;update();} }
 function prev(){ if(index>0){index--;update();} }
 
-/* ---------- FULLSCREEN SAFE ---------- */
+/* ---------- FULLSCREEN ---------- */
 const fsBtn=document.getElementById("fsBtn");
-
 fsBtn.addEventListener("click",()=>{
 if(!document.fullscreenElement){
 document.documentElement.requestFullscreen().catch(()=>{});
-}else{
-document.exitFullscreen().catch(()=>{});
-}
+}else{document.exitFullscreen().catch(()=>{});}
 });
-
-document.addEventListener("fullscreenchange",()=>{
-fsBtn.textContent=document.fullscreenElement?"✕":"⛶";
-});
+document.addEventListener("fullscreenchange",()=>{fsBtn.textContent=document.fullscreenElement?"✕":"⛶";});
 
 /* ---------- TODO ---------- */
 let todos=[];
 const todoList=document.getElementById("todoList");
-
 function renderTodos(){
 todoList.innerHTML="";
 todos.forEach((t,i)=>{
 const li=document.createElement("li");
-
-const span=document.createElement("span");
-span.textContent=t;
-
-const edit=document.createElement("button");
-edit.textContent="✏️";
-edit.onclick=()=>{
-const n=prompt("Edit",t);
-if(n){todos[i]=n;renderTodos();}
+const span=document.createElement("span"); span.textContent=t;
+const edit=document.createElement("button"); edit.textContent="✏️"; edit.onclick=()=>{
+const n=prompt("Edit",t); if(n){todos[i]=n;renderTodos();}
 };
-
-const del=document.createElement("button");
-del.textContent="❌";
-del.onclick=()=>{
-todos.splice(i,1);
-renderTodos();
-};
-
-const btns=document.createElement("div");
-btns.className="todoBtns";
-btns.append(edit,del);
-
-li.append(span,btns);
-todoList.appendChild(li);
+const del=document.createElement("button"); del.textContent="❌"; del.onclick=()=>{todos.splice(i,1);renderTodos();}
+const btns=document.createElement("div"); btns.className="todoBtns"; btns.append(edit,del);
+li.append(span,btns); todoList.appendChild(li);
 });
 }
-
-function addTodo(){
-const v=todoInput.value.trim();
-if(!v) return;
-todos.push(v);
-todoInput.value="";
-renderTodos();
-}
+function addTodo(){const v=todoInput.value.trim();if(!v) return; todos.push(v); todoInput.value=""; renderTodos();}
 
 /* ---------- STOPWATCH ---------- */
 let sw=0,swTimer=null;
-
-function swStart(){
-if(!swTimer)
-swTimer=setInterval(()=>{sw++;renderSW();},1000);
-}
+function swStart(){if(!swTimer) swTimer=setInterval(()=>{sw++;renderSW();},1000);}
 function swStop(){clearInterval(swTimer);swTimer=null;}
-function swReset(){swStop();sw=0;renderSW();}
+function swReset(){swStop(); sw=0; renderSW(); } // ONLY resets timer
 
-function renderSW(){
-swTime.textContent=
-String(Math.floor(sw/60)).padStart(2,"0")+":"+
-String(sw%60).padStart(2,"0");
-}
+function renderSW(){swTime.textContent=String(Math.floor(sw/60)).padStart(2,"0")+":"+String(sw%60).padStart(2,"0");}
 
 /* ---------- POMODORO ---------- */
 let pm=0,pmTimer=null;
-
-function pmStart(){
-if(pmTimer) return;
-pm=(+pmInput.value||25)*60;
-
-pmTimer=setInterval(()=>{
-pm--;
-renderPM();
-if(pm<=0) pmStop();
-},1000);
-}
-
+function pmStart(){if(pmTimer) return; pm=(+pmInput.value||25)*60; pmTimer=setInterval(()=>{pm--;renderPM();if(pm<=0) pmStop();},1000);}
 function pmStop(){clearInterval(pmTimer);pmTimer=null;}
-function pmReset(){pmStop();pm=0;renderPM();}
+function pmReset(){pmStop(); pm=0; renderPM(); } // ONLY resets timer
 
-function renderPM(){
-pmTime.textContent=
-String(Math.floor(pm/60)).padStart(2,"0")+":"+
-String(pm%60).padStart(2,"0");
-}
+function renderPM(){pmTime.textContent=String(Math.floor(pm/60)).padStart(2,"0")+":"+String(pm%60).padStart(2,"0");}
 
 function switchTimer(){
-stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
-pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
+stopwatchDiv.style.display = timerType.value==="stopwatch"?"block":"none";
+pomodoroDiv.style.display = timerType.value==="pomodoro"?"block":"none";
 }
 
 /* ---------- SOUND LOOP TOGGLE ---------- */
-const sounds=[
-new Audio("sleep.mp3"),
-new Audio("calm.mp3"),
-new Audio("peaceful.mp3"),
-new Audio("firewood.mp3")
-];
-
+const sounds=[new Audio("sleep.mp3"), new Audio("calm.mp3"), new Audio("peaceful.mp3"), new Audio("firewood.mp3")];
 sounds.forEach(s=>s.loop=true);
+function playSound(i){const s=sounds[i]; if(!s.paused){s.pause();s.currentTime=0;}else{s.play();}}
 
-function playSound(i){
-const s=sounds[i];
-
-if(!s.paused){
-s.pause();
-s.currentTime=0;
-}else{
-s.play();
-}
+/* ---------- PIP ---------- */
+const pipVideo=document.getElementById("pipVideo");
+function enablePIP(){
+if(pipVideo.webkitSupportsPresentationMode && pipVideo.webkitSupportsPresentationMode("picture-in-picture")){
+pipVideo.webkitSetPresentationMode("picture-in-picture");
+}else if('requestPictureInPicture' in pipVideo){pipVideo.requestPictureInPicture();}
 }
 </script>
 
