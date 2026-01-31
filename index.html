@@ -1,344 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Gentle Space 🌙</title>
+<meta charset="UTF-8">
+<title>Study Timer + Pomodoro + Todo</title>
 
 <style>
-:root{
-  --glass:rgba(255,255,255,.07);
-  --accent:#7aa2ff;
-  --accent2:#ff7aa8;
-  --text:#eef0ff;
-  --muted:#a9acc7;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Poppins,system-ui,sans-serif;
-}
-
-/* ===== DARK STRIPED BACKGROUND ===== */
 body{
-  background:
-    repeating-linear-gradient(
-      -25deg,
-      #0a0b12 0px,
-      #0a0b12 14px,
-      #12131c 14px,
-      #12131c 28px
-    );
-  color:var(--text);
-
-  overflow-y:auto;
-  overflow-x:hidden;
+    font-family:Arial;
+    background:#121417;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:30px;
 }
 
-/* ===== NAV ===== */
-.nav{
-  position:fixed;
-  top:12px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:10px;
-  z-index:1000;
+h1,h2{margin:10px;}
+
+#time{
+    font-size:70px;
+    margin:20px 0;
 }
 
-.nav button{
-  padding:10px 18px;
-  border-radius:999px;
-  background:var(--glass);
-  backdrop-filter:blur(12px);
-  color:white;
-  transition:.25s;
+button{
+    padding:8px 14px;
+    margin:5px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
 }
 
-.nav button:hover{
-  transform:translateY(-2px);
+.todo{
+    margin-top:40px;
+    width:350px;
 }
 
-/* ===== FULLSCREEN ===== */
-#fsBtn{
-  position:fixed;
-  top:12px;
-  right:12px;
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  font-size:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.3s;
+.todo input{
+    width:70%;
+    padding:8px;
 }
 
-#fsBtn:hover{
-  transform:scale(1.1);
-}
-
-/* ===== SLIDER ===== */
-.container{
-  display:flex;
-  width:100%;
-  min-height:100vh;
-  transition:transform .45s ease;
-}
-
-/* ===== PAGE ===== */
-.page{
-  flex:0 0 100%;
-  min-height:100vh;
-  padding:120px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  background:var(--glass);
-  backdrop-filter:blur(18px);
-}
-
-/* ===== HEADINGS ANIMATION ===== */
-h1{
-  opacity:0;
-  transform:translateY(20px);
-  animation:fadeUp .7s ease forwards;
-}
-
-@keyframes fadeUp{
-  to{opacity:1;transform:none;}
-}
-
-input,textarea,select{
-  width:100%;
-  max-width:340px;
-  padding:14px;
-  border-radius:18px;
-  border:none;
-  background:rgba(255,255,255,.15);
-  color:white;
-}
-
-ul{list-style:none;width:100%;max-width:340px;}
-
-li{
-  background:rgba(255,255,255,.18);
-  padding:12px;
-  border-radius:16px;
-  margin:8px 0;
-  display:flex;
-  justify-content:space-between;
-}
-
-li.done{opacity:.6;text-decoration:line-through;}
-
-.time{font-size:2.6rem;}
-
-.timer-controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-
-.timer-controls button{
-  padding:12px 24px;
-  border-radius:999px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  transition:.25s;
-}
-
-.timer-controls button:hover{
-  transform:scale(1.05);
-}
-
-/* ===== PEACE SOUND BUTTONS ===== */
-.sound-box{
-  margin-top:20px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.sound-box button{
-  padding:10px 18px;
-  border-radius:999px;
-  background:rgba(255,255,255,.12);
-  color:white;
-  transition:.25s;
-}
-
-.sound-box button.active{
-  background:linear-gradient(135deg,#6f8cff,#b36bff);
-  transform:scale(1.05);
-}
-
-footer{
-  position:fixed;
-  bottom:8px;
-  width:100%;
-  text-align:center;
-  color:var(--muted);
+.todo li{
+    background:#1e1e1e;
+    margin-top:8px;
+    padding:6px;
+    border-radius:6px;
+    display:flex;
+    justify-content:space-between;
 }
 </style>
 </head>
 
 <body>
 
-<div class="nav">
-  <button onclick="prev()">←</button>
-  <button onclick="next()">→</button>
-</div>
+<h1>Study Timer ⏱️</h1>
 
-<button id="fsBtn">⛶</button>
+<h2 id="mode">Normal Timer</h2>
+<div id="time">00:00</div>
 
-<div class="container" id="slider">
+<button onclick="start()">Start</button>
+<button onclick="stop()">Stop</button>
+<button onclick="reset()">Reset</button>
+<button onclick="toggleFullscreen()">Fullscreen</button>
 
-<section class="page">
-<h1>You’re doing enough 🌙</h1>
-<p>Slow down. One step is enough.</p>
-</section>
+<br>
 
-<section class="page">
-<h1>Todo ✨</h1>
-<input id="todoInput" placeholder="Write something…" />
-<button onclick="addTodo()">Add</button>
-<ul id="todoList"></ul>
-</section>
+<button onclick="setNormal()">Normal</button>
+<button onclick="setPomodoro()">Pomodoro 25/5</button>
 
-<section class="page">
+<br><br>
 
-<h1>Timer ⏱️</h1>
-
-<select id="timerType" onchange="switchTimer()">
-<option value="stopwatch">Stopwatch</option>
-<option value="pomodoro">Pomodoro</option>
+<!-- Sounds -->
+<select id="soundSelect">
+<option value="">No Sound</option>
+<option value="peace">Peaceful Solitude</option>
+<option value="calm">Calm Your Mind</option>
+<option value="sleep">Go To Bed It's Late</option>
+<option value="rain">Rain 🌧️</option>
 </select>
 
-<div id="stopwatchDiv">
-<div class="time" id="swTime">00:00</div>
-<div class="timer-controls">
-<button onclick="swStart()">Start</button>
-<button onclick="swStop()">Stop</button>
-<button onclick="swReset()">Reset</button>
-</div>
-</div>
 
-<div id="pomodoroDiv" style="display:none">
-<input id="pmInput" type="number" placeholder="Minutes">
-<div class="time" id="pmTime">00:00</div>
-<div class="timer-controls">
-<button onclick="pmStart()">Start</button>
-<button onclick="pmStop()">Stop</button>
-<button onclick="pmReset()">Reset</button>
-</div>
+<!-- TODO -->
+<div class="todo">
+<h2>To-Do List</h2>
+<input id="taskInput" placeholder="Add task...">
+<button onclick="addTask()">Add</button>
+<ul id="taskList"></ul>
 </div>
 
-<!-- ===== PEACEFUL SOUNDS ===== -->
-<div class="sound-box">
-<button onclick="toggleSound(0,this)">🌿 Peaceful Solitude</button>
-<button onclick="toggleSound(1,this)">🧠 Calm Your Mind</button>
-<button onclick="toggleSound(2,this)">🌙 Go To Bed It's Late</button>
-</div>
-
-</section>
-
-<section class="page">
-<h1>Notes 📝</h1>
-<textarea id="notes"></textarea>
-</section>
-
-<section class="page">
-<h1>Enough for today 🤍</h1>
-<p>You showed up. That counts.</p>
-</section>
-
-</div>
-
-<footer>Made by EREN 𒉭</footer>
 
 <script>
-/* ===== FULLSCREEN ===== */
-fsBtn.onclick=()=>{
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-  else document.exitFullscreen();
+/* ================= TIMER CORE ================= */
+let seconds = 0;
+let interval = null;
+let mode = "normal";
+let isBreak = false;
+
+function updateDisplay(){
+    let m = String(Math.floor(seconds/60)).padStart(2,'0');
+    let s = String(seconds%60).padStart(2,'0');
+    document.getElementById("time").innerText = m+":"+s;
+}
+
+/* START */
+function start(){
+    if(interval) return;
+
+    interval = setInterval(()=>{
+
+        if(mode==="normal"){
+            seconds++;
+        }
+
+        else if(mode==="pomodoro"){
+            seconds--;
+
+            if(seconds <= 0){
+                if(isBreak){
+                    seconds = 25*60;
+                    isBreak = false;
+                    alert("Break over! Study time 💪");
+                }else{
+                    seconds = 5*60;
+                    isBreak = true;
+                    alert("Take a break ☕");
+                }
+            }
+        }
+
+        updateDisplay();
+
+    },1000);
+}
+
+/* STOP */
+function stop(){
+    clearInterval(interval);
+    interval=null;
+}
+
+/* RESET */
+function reset(){
+    stop();
+    if(mode==="normal") seconds=0;
+    if(mode==="pomodoro") seconds=25*60;
+    isBreak=false;
+    updateDisplay();
+}
+
+/* MODES */
+function setNormal(){
+    mode="normal";
+    seconds=0;
+    document.getElementById("mode").innerText="Normal Timer";
+    updateDisplay();
+}
+
+function setPomodoro(){
+    mode="pomodoro";
+    seconds=25*60;
+    isBreak=false;
+    document.getElementById("mode").innerText="Pomodoro 25/5";
+    updateDisplay();
+}
+
+
+/* ================= FULLSCREEN SAFE ================= */
+function toggleFullscreen(){
+    if(!document.fullscreenElement){
+        document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+        document.exitFullscreen().catch(()=>{});
+    }
+}
+
+
+/* ================= TODO LIST ================= */
+function addTask(){
+    const text = taskInput.value.trim();
+    if(!text) return;
+
+    const li=document.createElement("li");
+    const span=document.createElement("span");
+    span.innerText=text;
+
+    const edit=document.createElement("button");
+    edit.innerText="Edit";
+    edit.onclick=()=>{
+        let t=prompt("Edit task:",span.innerText);
+        if(t) span.innerText=t;
+    }
+
+    const del=document.createElement("button");
+    del.innerText="Delete";
+    del.onclick=()=>li.remove();
+
+    const box=document.createElement("div");
+    box.append(edit,del);
+
+    li.append(span,box);
+    taskList.appendChild(li);
+
+    taskInput.value="";
+}
+
+
+/* ================= SOUNDS ================= */
+const sounds={
+peace:new Audio("peace.mp3"),
+calm:new Audio("calm.mp3"),
+sleep:new Audio("sleep.mp3"),
+rain:new Audio("rain.mp3")
 };
 
-/* ===== SOUNDS ===== */
-const sounds=[
-  new Audio("peaceful.mp3"),
-  new Audio("calm.mp3"),
-  new Audio("sleep.mp3")
-];
-
-sounds.forEach(s=>s.loop=true);
-
-function toggleSound(i,btn){
-  if(!sounds[i].paused){
-    sounds[i].pause();
-    btn.classList.remove("active");
-  }else{
-    sounds.forEach((s,j)=>{
-      s.pause();
-      document.querySelectorAll(".sound-box button")[j].classList.remove("active");
+soundSelect.onchange=function(){
+    Object.values(sounds).forEach(a=>{
+        a.pause();
+        a.currentTime=0;
     });
-    sounds[i].play();
-    btn.classList.add("active");
-  }
-}
 
-/* ===== REST OF YOUR ORIGINAL JS ===== */
-let index=0,todos=[],sw=0,pm=0,swTimer=null,pmTimer=null;
-
-const slider=document.getElementById("slider");
-
-function update(){slider.style.transform=`translateX(-${index*100}%)`;}
-function next(){if(index<4){index++;update();}}
-function prev(){if(index>0){index--;update();}}
-
-function addTodo(){
- if(!todoInput.value) return;
- todos.push({text:todoInput.value,done:false});
- renderTodos(); todoInput.value="";
-}
-
-function renderTodos(){
- todoList.innerHTML="";
- todos.forEach((t,i)=>{
-  const li=document.createElement("li");
-  li.textContent=t.text;
-  li.onclick=()=>li.classList.toggle("done");
-  todoList.appendChild(li);
- });
-}
-
-function swStart(){if(!swTimer)swTimer=setInterval(()=>{sw++;renderSW();},1000);}
-function swStop(){clearInterval(swTimer);swTimer=null;}
-function swReset(){sw=0;renderSW();}
-function renderSW(){swTime.textContent=Math.floor(sw/60).toString().padStart(2,"0")+":"+ (sw%60).toString().padStart(2,"0");}
-
-function pmStart(){
- if(pmTimer) return;
- pm=(+pmInput.value||0)*60;
- pmTimer=setInterval(()=>{pm--;renderPM();if(pm<=0)pmStop();},1000);
-}
-function pmStop(){clearInterval(pmTimer);pmTimer=null;}
-function pmReset(){pm=0;renderPM();}
-function renderPM(){pmTime.textContent=Math.floor(pm/60).toString().padStart(2,"0")+":"+ (pm%60).toString().padStart(2,"0");}
-
-function switchTimer(){
- stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
- pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
-}
+    if(this.value){
+        sounds[this.value].loop=true;
+        sounds[this.value].play();
+    }
+};
 </script>
 
 </body>
