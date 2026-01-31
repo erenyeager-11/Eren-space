@@ -222,7 +222,7 @@ li{
 <button class="sound-btn" onclick="playSound(0)">Peaceful Solitude</button>
 <button class="sound-btn" onclick="playSound(1)">Calm Your Mind</button>
 <button class="sound-btn" onclick="playSound(2)">Go To Bed It's Late</button>
-<button class="sound-btn" onclick="playSound(3)">Rain</button>
+<button class="sound-btn" onclick="playSound(3)">firewood</button>
 </div>
 </section>
 
@@ -346,10 +346,10 @@ pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
 
 /* ---------- SOUND SYSTEM ---------- */
 const sounds=[
-new Audio("peace1.mp3"),
-new Audio("peace2.mp3"),
-new Audio("peace3.mp3"),
-new Audio("rain.mp3")
+new Audio("sleep.mp3"),
+new Audio("calm.mp3"),
+new Audio("peaceful.mp3"),
+new Audio("firewood.mp3")
 ];
 
 sounds.forEach(s=>s.loop=true);
@@ -363,3 +363,4 @@ sounds[i].play();
 
 </body>
 </html>
+
