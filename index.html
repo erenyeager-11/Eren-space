@@ -25,11 +25,9 @@
 
 /* 🔥 Premium toned gold background */
 body{
-  background:
-  radial-gradient(circle at top,#2b2416,#0b0a08 70%);
+  background: radial-gradient(circle at top,#2b2416,#0b0a08 70%);
   color:var(--text);
   overflow-x:hidden;
-  overflow-y:auto;
 }
 
 /* ---------- NAV ---------- */
@@ -70,31 +68,28 @@ body{
 .container{
   display:flex;
   width:100%;
-  height:100dvh;
+  min-height:100vh;
   transition:transform .4s ease;
 }
 
 .page{
   flex:0 0 100%;
-  height:100dvh;
-  padding:100px 18px 60px;
+  min-height:100vh;
+  padding:100px 18px 80px;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:18px;
   background:var(--glass);
   backdrop-filter:blur(16px);
+
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ---------- TEXT ---------- */
-h1{
-  font-size:clamp(1.5rem,6vw,2.2rem);
-}
-
-p{
-  color:var(--muted);
-  text-align:center;
-}
+h1{font-size:clamp(1.5rem,6vw,2.2rem);}
+p{color:var(--muted);text-align:center;}
 
 /* ---------- INPUTS ---------- */
 input,textarea,select{
@@ -107,7 +102,7 @@ input,textarea,select{
   color:white;
 }
 
-/* ---------- BUTTON ANIMATION ---------- */
+/* ---------- BUTTONS ---------- */
 button{
   cursor:pointer;
   border:none;
@@ -145,14 +140,10 @@ li{
   background:rgba(255,255,255,.1);
 }
 
-.todoBtns button{
-  margin-left:6px;
-}
+.todoBtns button{margin-left:6px;}
 
 /* ---------- TIMER ---------- */
-.time{
-  font-size:2.8rem;
-}
+.time{font-size:2.8rem;}
 
 /* ---------- SOUND ---------- */
 .soundWrap{
@@ -175,22 +166,20 @@ li{
 
 <div class="container" id="slider">
 
-<!-- PAGE 1 -->
 <section class="page">
-  <h1>You’re doing enough 🌙</h1>
-  <p>Slow down. One step is enough.</p>
+<h1>You’re doing enough 🌙</h1>
+<p>Slow down. One step is enough.</p>
 </section>
 
-<!-- PAGE 2 TODO -->
 <section class="page">
-  <h1>Todo ✨</h1>
-  <input id="todoInput" placeholder="Add task...">
-  <button class="addBtn" onclick="addTodo()">Add</button>
-  <ul id="todoList"></ul>
+<h1>Todo ✨</h1>
+<input id="todoInput" placeholder="Add task...">
+<button class="addBtn" onclick="addTodo()">Add</button>
+<ul id="todoList"></ul>
 </section>
 
-<!-- PAGE 3 TIMER -->
 <section class="page">
+
 <h1>Timer ⏱️</h1>
 
 <select id="timerType" onchange="switchTimer()">
@@ -217,16 +206,15 @@ li{
 </div>
 </div>
 
-<!-- 🔥 SOUND BUTTONS -->
 <div class="soundWrap">
-<button class="sound-btn" onclick="playSound(0)">River flow</button>
+<button class="sound-btn" onclick="playSound(0)">River Flow</button>
 <button class="sound-btn" onclick="playSound(1)">Calm Your Mind</button>
 <button class="sound-btn" onclick="playSound(2)">Go To Bed It's Late</button>
-<button class="sound-btn" onclick="playSound(3)">firewood</button>
+<button class="sound-btn" onclick="playSound(3)">Firewood</button>
 </div>
+
 </section>
 
-<!-- PAGE 4 -->
 <section class="page">
 <textarea id="notes" placeholder="Write freely..."></textarea>
 </section>
@@ -245,16 +233,20 @@ slider.style.transform=`translateX(-${index*100}%)`;
 function next(){ if(index<3){index++;update();} }
 function prev(){ if(index>0){index--;update();} }
 
-/* ---------- FULLSCREEN FIXED ---------- */
+/* ---------- FULLSCREEN SAFE ---------- */
 const fsBtn=document.getElementById("fsBtn");
 
-fsBtn.onclick=()=>{
+fsBtn.addEventListener("click",()=>{
 if(!document.fullscreenElement){
-document.documentElement.requestFullscreen();
+document.documentElement.requestFullscreen().catch(()=>{});
 }else{
-document.exitFullscreen();
+document.exitFullscreen().catch(()=>{});
 }
-};
+});
+
+document.addEventListener("fullscreenchange",()=>{
+fsBtn.textContent=document.fullscreenElement?"✕":"⛶";
+});
 
 /* ---------- TODO ---------- */
 let todos=[];
@@ -262,7 +254,6 @@ const todoList=document.getElementById("todoList");
 
 function renderTodos(){
 todoList.innerHTML="";
-
 todos.forEach((t,i)=>{
 const li=document.createElement("li");
 
@@ -301,7 +292,7 @@ renderTodos();
 }
 
 /* ---------- STOPWATCH ---------- */
-let sw=0, swTimer=null;
+let sw=0,swTimer=null;
 
 function swStart(){
 if(!swTimer)
@@ -317,7 +308,7 @@ String(sw%60).padStart(2,"0");
 }
 
 /* ---------- POMODORO ---------- */
-let pm=0, pmTimer=null;
+let pm=0,pmTimer=null;
 
 function pmStart(){
 if(pmTimer) return;
@@ -344,7 +335,7 @@ stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
 pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
 }
 
-/* ---------- SOUND SYSTEM ---------- */
+/* ---------- SOUND LOOP TOGGLE ---------- */
 const sounds=[
 new Audio("sleep.mp3"),
 new Audio("calm.mp3"),
@@ -352,26 +343,20 @@ new Audio("peaceful.mp3"),
 new Audio("firewood.mp3")
 ];
 
-sounds.forEach(s => s.loop = true);
+sounds.forEach(s=>s.loop=true);
 
 function playSound(i){
+const s=sounds[i];
 
-  const s = sounds[i];
-
-  // if already playing → stop
-  if(!s.paused){
-    s.pause();
-    s.currentTime = 0;
-    return;
-  }
-
-  // else play (loop forever)
-  s.play();
+if(!s.paused){
+s.pause();
+s.currentTime=0;
+}else{
+s.play();
+}
 }
 </script>
 
 </body>
 </html>
-
-
 
