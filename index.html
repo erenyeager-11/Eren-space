@@ -352,15 +352,25 @@ new Audio("peaceful.mp3"),
 new Audio("firewood.mp3")
 ];
 
-sounds.forEach(s=>s.loop=true);
+sounds.forEach(s => s.loop = true);
 
 function playSound(i){
-sounds.forEach(s=>s.pause());
-sounds[i].currentTime=0;
-sounds[i].play();
+
+  const s = sounds[i];
+
+  // if already playing → stop
+  if(!s.paused){
+    s.pause();
+    s.currentTime = 0;
+    return;
+  }
+
+  // else play (loop forever)
+  s.play();
 }
 </script>
 
 </body>
 </html>
+
 
