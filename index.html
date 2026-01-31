@@ -1,231 +1,365 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Study Timer + Pomodoro + Todo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gentle Space 🌙</title>
 
 <style>
+:root{
+  --bg:#0b0a08;
+  --gold1:#c6a96b;
+  --gold2:#8f7440;
+  --glass:rgba(255,255,255,.06);
+  --text:#f4f1e8;
+  --muted:#b8b4a6;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Poppins,system-ui,sans-serif;
+}
+
+/* 🔥 Premium toned gold background */
 body{
-    font-family:Arial;
-    background:#121417;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:30px;
+  background:
+  radial-gradient(circle at top,#2b2416,#0b0a08 70%);
+  color:var(--text);
+  overflow-x:hidden;
+  overflow-y:auto;
 }
 
-h1,h2{margin:10px;}
-
-#time{
-    font-size:70px;
-    margin:20px 0;
+/* ---------- NAV ---------- */
+.nav{
+  position:fixed;
+  top:12px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+  z-index:1000;
 }
 
+.nav button{
+  padding:10px 18px;
+  border-radius:999px;
+  background:var(--glass);
+  color:white;
+  backdrop-filter:blur(8px);
+}
+
+/* ---------- FULLSCREEN ---------- */
+#fsBtn{
+  position:fixed;
+  top:12px;
+  right:12px;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:none;
+  background:linear-gradient(135deg,var(--gold1),var(--gold2));
+  color:black;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* ---------- SLIDER ---------- */
+.container{
+  display:flex;
+  width:100%;
+  height:100dvh;
+  transition:transform .4s ease;
+}
+
+.page{
+  flex:0 0 100%;
+  height:100dvh;
+  padding:100px 18px 60px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  background:var(--glass);
+  backdrop-filter:blur(16px);
+}
+
+/* ---------- TEXT ---------- */
+h1{
+  font-size:clamp(1.5rem,6vw,2.2rem);
+}
+
+p{
+  color:var(--muted);
+  text-align:center;
+}
+
+/* ---------- INPUTS ---------- */
+input,textarea,select{
+  width:100%;
+  max-width:340px;
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,.1);
+  color:white;
+}
+
+/* ---------- BUTTON ANIMATION ---------- */
 button{
-    padding:8px 14px;
-    margin:5px;
-    border-radius:8px;
-    border:none;
-    cursor:pointer;
+  cursor:pointer;
+  border:none;
+  font-weight:600;
+  transition:.25s;
 }
 
-.todo{
-    margin-top:40px;
-    width:350px;
+.timer-controls button,
+.sound-btn,
+.addBtn{
+  padding:12px 22px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--gold1),var(--gold2));
+  color:black;
 }
 
-.todo input{
-    width:70%;
-    padding:8px;
+button:hover{
+  transform:scale(1.06);
 }
 
-.todo li{
-    background:#1e1e1e;
-    margin-top:8px;
-    padding:6px;
-    border-radius:6px;
-    display:flex;
-    justify-content:space-between;
+/* ---------- TODO ---------- */
+ul{
+  list-style:none;
+  width:100%;
+  max-width:340px;
+}
+
+li{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  margin:6px 0;
+  border-radius:12px;
+  background:rgba(255,255,255,.1);
+}
+
+.todoBtns button{
+  margin-left:6px;
+}
+
+/* ---------- TIMER ---------- */
+.time{
+  font-size:2.8rem;
+}
+
+/* ---------- SOUND ---------- */
+.soundWrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Study Timer ⏱️</h1>
-
-<h2 id="mode">Normal Timer</h2>
-<div id="time">00:00</div>
-
-<button onclick="start()">Start</button>
-<button onclick="stop()">Stop</button>
-<button onclick="reset()">Reset</button>
-<button onclick="toggleFullscreen()">Fullscreen</button>
-
-<br>
-
-<button onclick="setNormal()">Normal</button>
-<button onclick="setPomodoro()">Pomodoro 25/5</button>
-
-<br><br>
-
-<!-- Sounds -->
-<select id="soundSelect">
-<option value="">No Sound</option>
-<option value="peace">Peaceful Solitude</option>
-<option value="calm">Calm Your Mind</option>
-<option value="sleep">Go To Bed It's Late</option>
-<option value="rain">Rain 🌧️</option>
-</select>
-
-
-<!-- TODO -->
-<div class="todo">
-<h2>To-Do List</h2>
-<input id="taskInput" placeholder="Add task...">
-<button onclick="addTask()">Add</button>
-<ul id="taskList"></ul>
+<div class="nav">
+  <button onclick="prev()">←</button>
+  <button onclick="next()">→</button>
 </div>
 
+<button id="fsBtn">⛶</button>
+
+<div class="container" id="slider">
+
+<!-- PAGE 1 -->
+<section class="page">
+  <h1>You’re doing enough 🌙</h1>
+  <p>Slow down. One step is enough.</p>
+</section>
+
+<!-- PAGE 2 TODO -->
+<section class="page">
+  <h1>Todo ✨</h1>
+  <input id="todoInput" placeholder="Add task...">
+  <button class="addBtn" onclick="addTodo()">Add</button>
+  <ul id="todoList"></ul>
+</section>
+
+<!-- PAGE 3 TIMER -->
+<section class="page">
+<h1>Timer ⏱️</h1>
+
+<select id="timerType" onchange="switchTimer()">
+<option value="stopwatch">Stopwatch</option>
+<option value="pomodoro">Pomodoro</option>
+</select>
+
+<div id="stopwatchDiv">
+<div class="time" id="swTime">00:00</div>
+<div class="timer-controls">
+<button onclick="swStart()">Start</button>
+<button onclick="swStop()">Stop</button>
+<button onclick="swReset()">Reset</button>
+</div>
+</div>
+
+<div id="pomodoroDiv" style="display:none">
+<input id="pmInput" type="number" placeholder="Minutes">
+<div class="time" id="pmTime">00:00</div>
+<div class="timer-controls">
+<button onclick="pmStart()">Start</button>
+<button onclick="pmStop()">Stop</button>
+<button onclick="pmReset()">Reset</button>
+</div>
+</div>
+
+<!-- 🔥 SOUND BUTTONS -->
+<div class="soundWrap">
+<button class="sound-btn" onclick="playSound(0)">Peaceful Solitude</button>
+<button class="sound-btn" onclick="playSound(1)">Calm Your Mind</button>
+<button class="sound-btn" onclick="playSound(2)">Go To Bed It's Late</button>
+<button class="sound-btn" onclick="playSound(3)">Rain</button>
+</div>
+</section>
+
+<!-- PAGE 4 -->
+<section class="page">
+<textarea id="notes" placeholder="Write freely..."></textarea>
+</section>
+
+</div>
 
 <script>
-/* ================= TIMER CORE ================= */
-let seconds = 0;
-let interval = null;
-let mode = "normal";
-let isBreak = false;
+/* ---------- SLIDER ---------- */
+let index=0;
+const slider=document.getElementById("slider");
 
-function updateDisplay(){
-    let m = String(Math.floor(seconds/60)).padStart(2,'0');
-    let s = String(seconds%60).padStart(2,'0');
-    document.getElementById("time").innerText = m+":"+s;
+function update(){
+slider.style.transform=`translateX(-${index*100}%)`;
 }
 
-/* START */
-function start(){
-    if(interval) return;
+function next(){ if(index<3){index++;update();} }
+function prev(){ if(index>0){index--;update();} }
 
-    interval = setInterval(()=>{
+/* ---------- FULLSCREEN FIXED ---------- */
+const fsBtn=document.getElementById("fsBtn");
 
-        if(mode==="normal"){
-            seconds++;
-        }
-
-        else if(mode==="pomodoro"){
-            seconds--;
-
-            if(seconds <= 0){
-                if(isBreak){
-                    seconds = 25*60;
-                    isBreak = false;
-                    alert("Break over! Study time 💪");
-                }else{
-                    seconds = 5*60;
-                    isBreak = true;
-                    alert("Take a break ☕");
-                }
-            }
-        }
-
-        updateDisplay();
-
-    },1000);
+fsBtn.onclick=()=>{
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen();
+}else{
+document.exitFullscreen();
 }
-
-/* STOP */
-function stop(){
-    clearInterval(interval);
-    interval=null;
-}
-
-/* RESET */
-function reset(){
-    stop();
-    if(mode==="normal") seconds=0;
-    if(mode==="pomodoro") seconds=25*60;
-    isBreak=false;
-    updateDisplay();
-}
-
-/* MODES */
-function setNormal(){
-    mode="normal";
-    seconds=0;
-    document.getElementById("mode").innerText="Normal Timer";
-    updateDisplay();
-}
-
-function setPomodoro(){
-    mode="pomodoro";
-    seconds=25*60;
-    isBreak=false;
-    document.getElementById("mode").innerText="Pomodoro 25/5";
-    updateDisplay();
-}
-
-
-/* ================= FULLSCREEN SAFE ================= */
-function toggleFullscreen(){
-    if(!document.fullscreenElement){
-        document.documentElement.requestFullscreen().catch(()=>{});
-    } else {
-        document.exitFullscreen().catch(()=>{});
-    }
-}
-
-
-/* ================= TODO LIST ================= */
-function addTask(){
-    const text = taskInput.value.trim();
-    if(!text) return;
-
-    const li=document.createElement("li");
-    const span=document.createElement("span");
-    span.innerText=text;
-
-    const edit=document.createElement("button");
-    edit.innerText="Edit";
-    edit.onclick=()=>{
-        let t=prompt("Edit task:",span.innerText);
-        if(t) span.innerText=t;
-    }
-
-    const del=document.createElement("button");
-    del.innerText="Delete";
-    del.onclick=()=>li.remove();
-
-    const box=document.createElement("div");
-    box.append(edit,del);
-
-    li.append(span,box);
-    taskList.appendChild(li);
-
-    taskInput.value="";
-}
-
-
-/* ================= SOUNDS ================= */
-const sounds={
-peace:new Audio("peace.mp3"),
-calm:new Audio("calm.mp3"),
-sleep:new Audio("sleep.mp3"),
-Firewood:new Audio("Firewood.mp3")
 };
 
-soundSelect.onchange=function(){
-    Object.values(sounds).forEach(a=>{
-        a.pause();
-        a.currentTime=0;
-    });
+/* ---------- TODO ---------- */
+let todos=[];
+const todoList=document.getElementById("todoList");
 
-    if(this.value){
-        sounds[this.value].loop=true;
-        sounds[this.value].play();
-    }
+function renderTodos(){
+todoList.innerHTML="";
+
+todos.forEach((t,i)=>{
+const li=document.createElement("li");
+
+const span=document.createElement("span");
+span.textContent=t;
+
+const edit=document.createElement("button");
+edit.textContent="✏️";
+edit.onclick=()=>{
+const n=prompt("Edit",t);
+if(n){todos[i]=n;renderTodos();}
 };
+
+const del=document.createElement("button");
+del.textContent="❌";
+del.onclick=()=>{
+todos.splice(i,1);
+renderTodos();
+};
+
+const btns=document.createElement("div");
+btns.className="todoBtns";
+btns.append(edit,del);
+
+li.append(span,btns);
+todoList.appendChild(li);
+});
+}
+
+function addTodo(){
+const v=todoInput.value.trim();
+if(!v) return;
+todos.push(v);
+todoInput.value="";
+renderTodos();
+}
+
+/* ---------- STOPWATCH ---------- */
+let sw=0, swTimer=null;
+
+function swStart(){
+if(!swTimer)
+swTimer=setInterval(()=>{sw++;renderSW();},1000);
+}
+function swStop(){clearInterval(swTimer);swTimer=null;}
+function swReset(){swStop();sw=0;renderSW();}
+
+function renderSW(){
+swTime.textContent=
+String(Math.floor(sw/60)).padStart(2,"0")+":"+
+String(sw%60).padStart(2,"0");
+}
+
+/* ---------- POMODORO ---------- */
+let pm=0, pmTimer=null;
+
+function pmStart(){
+if(pmTimer) return;
+pm=(+pmInput.value||25)*60;
+
+pmTimer=setInterval(()=>{
+pm--;
+renderPM();
+if(pm<=0) pmStop();
+},1000);
+}
+
+function pmStop(){clearInterval(pmTimer);pmTimer=null;}
+function pmReset(){pmStop();pm=0;renderPM();}
+
+function renderPM(){
+pmTime.textContent=
+String(Math.floor(pm/60)).padStart(2,"0")+":"+
+String(pm%60).padStart(2,"0");
+}
+
+function switchTimer(){
+stopwatchDiv.style.display=timerType.value==="stopwatch"?"block":"none";
+pomodoroDiv.style.display=timerType.value==="pomodoro"?"block":"none";
+}
+
+/* ---------- SOUND SYSTEM ---------- */
+const sounds=[
+new Audio("peace1.mp3"),
+new Audio("peace2.mp3"),
+new Audio("peace3.mp3"),
+new Audio("rain.mp3")
+];
+
+sounds.forEach(s=>s.loop=true);
+
+function playSound(i){
+sounds.forEach(s=>s.pause());
+sounds[i].currentTime=0;
+sounds[i].play();
+}
 </script>
 
 </body>
 </html>
-
