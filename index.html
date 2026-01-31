@@ -15,12 +15,7 @@
   --muted:#b8b4a6;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Poppins,system-ui,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,system-ui,sans-serif;}
 
 body{
   background: radial-gradient(circle at top,#2b2416,#0b0a08 70%);
@@ -29,7 +24,7 @@ body{
   touch-action: pan-y;
 }
 
-/* ---------- NAV ---------- */
+/* NAV */
 .nav{
   position:fixed;
   top:12px;
@@ -39,17 +34,16 @@ body{
   gap:10px;
   z-index:1000;
 }
-
 .nav button{
   padding:8px 14px;
   border-radius:999px;
   background:var(--glass);
   color:white;
-  backdrop-filter:blur(6px);
+  backdrop-filter:blur(4px);
   font-size:0.9rem;
 }
 
-/* ---------- FULLSCREEN ---------- */
+/* FULLSCREEN */
 #fsBtn{
   position:fixed;
   top:12px;
@@ -64,34 +58,32 @@ body{
   cursor:pointer;
 }
 
-/* ---------- SLIDER ---------- */
+/* SLIDER */
 .container{
   display:flex;
   width:100%;
   min-height:100vh;
-  transition:transform .3s ease;
-  scroll-behavior: smooth;
+  transition:transform .25s ease;
 }
-
 .page{
   flex:0 0 100%;
   min-height:100vh;
-  padding:90px 16px 70px;
+  padding:80px 12px 60px;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:16px;
   background:var(--glass);
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(8px);
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
 }
 
-/* ---------- TEXT ---------- */
+/* TEXT */
 h1{font-size:clamp(1.5rem,5vw,2rem);}
 p{color:var(--muted);text-align:center;}
 
-/* ---------- INPUTS ---------- */
+/* INPUTS */
 input,textarea,select{
   width:100%;
   max-width:320px;
@@ -103,14 +95,13 @@ input,textarea,select{
   font-size:0.95rem;
 }
 
-/* ---------- BUTTONS ---------- */
+/* BUTTONS */
 button{
   cursor:pointer;
   border:none;
   font-weight:600;
   transition:.2s;
 }
-
 .timer-controls button,
 .sound-btn,
 .addBtn{
@@ -120,18 +111,10 @@ button{
   color:black;
   font-size:0.9rem;
 }
+button:hover{transform:scale(1.05);}
 
-button:hover{
-  transform:scale(1.05);
-}
-
-/* ---------- TODO ---------- */
-ul{
-  list-style:none;
-  width:100%;
-  max-width:320px;
-}
-
+/* TODO */
+ul{list-style:none;width:100%;max-width:320px;}
 li{
   display:flex;
   justify-content:space-between;
@@ -141,13 +124,12 @@ li{
   border-radius:12px;
   background:rgba(255,255,255,.1);
 }
-
 .todoBtns button{margin-left:6px;font-size:0.85rem;}
 
-/* ---------- TIMER ---------- */
+/* TIMER */
 .time{font-size:2rem;}
 
-/* ---------- SOUND ---------- */
+/* SOUND */
 .soundWrap{
   display:flex;
   flex-wrap:wrap;
@@ -155,17 +137,12 @@ li{
   justify-content:center;
 }
 
-/* ---------- NOTES ---------- */
-textarea{
-  min-height:200px;
-  resize:none;
-}
+/* NOTES */
+textarea{min-height:200px;resize:none;}
 
-/* ---------- RESPONSIVE ---------- */
+/* RESPONSIVE */
 @media(max-width:500px){
-  .page{
-    padding:70px 12px 60px;
-  }
+  .page{padding:70px 10px 50px;}
   h1{font-size:clamp(1.2rem,6vw,1.8rem);}
   .time{font-size:1.8rem;}
   .nav button{padding:6px 12px;font-size:0.8rem;}
@@ -179,16 +156,17 @@ textarea{
   <button onclick="prev()">←</button>
   <button onclick="next()">→</button>
 </div>
-
 <button id="fsBtn">⛶</button>
 
 <div class="container" id="slider">
 
+<!-- Page 1 -->
 <section class="page">
 <h1>You’re doing enough 🌙</h1>
 <p>Slow down. One step is enough.</p>
 </section>
 
+<!-- Page 2: Todo -->
 <section class="page">
 <h1>Todo ✨</h1>
 <input id="todoInput" placeholder="Add task...">
@@ -196,9 +174,9 @@ textarea{
 <ul id="todoList"></ul>
 </section>
 
+<!-- Page 3: Timer & Sounds -->
 <section class="page">
 <h1>Timer ⏱️</h1>
-
 <select id="timerType" onchange="switchTimer()">
 <option value="stopwatch">Stopwatch</option>
 <option value="pomodoro">Pomodoro</option>
@@ -232,9 +210,9 @@ textarea{
 
 <!-- PIP-ready video placeholder -->
 <video id="pipVideo" style="display:none;" src="video.mp4" controls></video>
-
 </section>
 
+<!-- Page 4: Notes -->
 <section class="page">
 <textarea id="notes" placeholder="Write freely..."></textarea>
 </section>
@@ -246,8 +224,8 @@ textarea{
 let index=0;
 const slider=document.getElementById("slider");
 function update(){slider.style.transform=`translateX(-${index*100}%)`;}
-function next(){ if(index<3){index++;update();} }
-function prev(){ if(index>0){index--;update();} }
+function next(){if(index<3){index++;update();}}
+function prev(){if(index>0){index--;update();}}
 
 /* ---------- FULLSCREEN ---------- */
 const fsBtn=document.getElementById("fsBtn");
@@ -258,59 +236,85 @@ document.documentElement.requestFullscreen().catch(()=>{});
 });
 document.addEventListener("fullscreenchange",()=>{fsBtn.textContent=document.fullscreenElement?"✕":"⛶";});
 
-/* ---------- TODO ---------- */
-let todos=[];
+/* ---------- TODOS with localStorage ---------- */
+let todos = JSON.parse(localStorage.getItem("todos") || "[]");
 const todoList=document.getElementById("todoList");
 function renderTodos(){
-todoList.innerHTML="";
-todos.forEach((t,i)=>{
-const li=document.createElement("li");
-const span=document.createElement("span"); span.textContent=t;
-const edit=document.createElement("button"); edit.textContent="✏️"; edit.onclick=()=>{
-const n=prompt("Edit",t); if(n){todos[i]=n;renderTodos();}
-};
-const del=document.createElement("button"); del.textContent="❌"; del.onclick=()=>{todos.splice(i,1);renderTodos();}
-const btns=document.createElement("div"); btns.className="todoBtns"; btns.append(edit,del);
-li.append(span,btns); todoList.appendChild(li);
-});
+  todoList.innerHTML="";
+  todos.forEach((t,i)=>{
+    const li=document.createElement("li");
+    const span=document.createElement("span");
+    span.textContent=t;
+    
+    const edit=document.createElement("button"); edit.textContent="✏️"; edit.onclick=()=>{
+      const n=prompt("Edit task:", t);
+      if(n){ todos[i]=n; saveTodos(); renderTodos(); }
+    };
+    
+    const del=document.createElement("button"); del.textContent="❌"; del.onclick=()=>{
+      todos.splice(i,1); saveTodos(); renderTodos();
+    };
+    
+    const btns=document.createElement("div"); btns.className="todoBtns"; btns.append(edit,del);
+    li.append(span,btns); todoList.appendChild(li);
+  });
 }
-function addTodo(){const v=todoInput.value.trim();if(!v) return; todos.push(v); todoInput.value=""; renderTodos();}
+function addTodo(){
+  const v=document.getElementById("todoInput").value.trim();
+  if(!v) return;
+  todos.push(v); saveTodos(); document.getElementById("todoInput").value=""; renderTodos();
+}
+function saveTodos(){ localStorage.setItem("todos", JSON.stringify(todos)); }
+renderTodos();
+
+/* ---------- NOTES with localStorage ---------- */
+const notesEl = document.getElementById("notes");
+notesEl.value = localStorage.getItem("notes") || "";
+notesEl.addEventListener("input",()=>{ localStorage.setItem("notes", notesEl.value); });
 
 /* ---------- STOPWATCH ---------- */
 let sw=0,swTimer=null;
 function swStart(){if(!swTimer) swTimer=setInterval(()=>{sw++;renderSW();},1000);}
-function swStop(){clearInterval(swTimer);swTimer=null;}
-function swReset(){swStop(); sw=0; renderSW(); } // ONLY resets timer
-
-function renderSW(){swTime.textContent=String(Math.floor(sw/60)).padStart(2,"0")+":"+String(sw%60).padStart(2,"0");}
+function swStop(){clearInterval(swTimer); swTimer=null;}
+function swReset(){swStop(); sw=0; renderSW(); } // only timer reset
+function renderSW(){document.getElementById("swTime").textContent=String(Math.floor(sw/60)).padStart(2,"0")+":"+String(sw%60).padStart(2,"0");}
 
 /* ---------- POMODORO ---------- */
 let pm=0,pmTimer=null;
-function pmStart(){if(pmTimer) return; pm=(+pmInput.value||25)*60; pmTimer=setInterval(()=>{pm--;renderPM();if(pm<=0) pmStop();},1000);}
-function pmStop(){clearInterval(pmTimer);pmTimer=null;}
-function pmReset(){pmStop(); pm=0; renderPM(); } // ONLY resets timer
-
-function renderPM(){pmTime.textContent=String(Math.floor(pm/60)).padStart(2,"0")+":"+String(pm%60).padStart(2,"0");}
+function pmStart(){if(pmTimer) return; pm=(+document.getElementById("pmInput").value||25)*60; pmTimer=setInterval(()=>{pm--; renderPM(); if(pm<=0) pmStop(); },1000);}
+function pmStop(){clearInterval(pmTimer); pmTimer=null;}
+function pmReset(){pmStop(); pm=0; renderPM(); } // only timer reset
+function renderPM(){document.getElementById("pmTime").textContent=String(Math.floor(pm/60)).padStart(2,"0")+":"+String(pm%60).padStart(2,"0");}
 
 function switchTimer(){
-stopwatchDiv.style.display = timerType.value==="stopwatch"?"block":"none";
-pomodoroDiv.style.display = timerType.value==="pomodoro"?"block":"none";
+  document.getElementById("stopwatchDiv").style.display = document.getElementById("timerType").value==="stopwatch"?"block":"none";
+  document.getElementById("pomodoroDiv").style.display = document.getElementById("timerType").value==="pomodoro"?"block":"none";
 }
 
-/* ---------- SOUND LOOP TOGGLE ---------- */
-const sounds=[new Audio("sleep.mp3"), new Audio("calm.mp3"), new Audio("peaceful.mp3"), new Audio("firewood.mp3")];
+/* ---------- SOUND ---------- */
+const sounds=[
+  new Audio("sleep.mp3"),
+  new Audio("calm.mp3"),
+  new Audio("peaceful.mp3"),
+  new Audio("firewood.mp3")
+];
 sounds.forEach(s=>s.loop=true);
-function playSound(i){const s=sounds[i]; if(!s.paused){s.pause();s.currentTime=0;}else{s.play();}}
+function playSound(i){
+  const s=sounds[i];
+  if(!s.paused){ s.pause(); s.currentTime=0; }
+  else{ s.play(); }
+}
 
 /* ---------- PIP ---------- */
 const pipVideo=document.getElementById("pipVideo");
 function enablePIP(){
-if(pipVideo.webkitSupportsPresentationMode && pipVideo.webkitSupportsPresentationMode("picture-in-picture")){
-pipVideo.webkitSetPresentationMode("picture-in-picture");
-}else if('requestPictureInPicture' in pipVideo){pipVideo.requestPictureInPicture();}
+  if(pipVideo.webkitSupportsPresentationMode && pipVideo.webkitSupportsPresentationMode("picture-in-picture")){
+    pipVideo.webkitSetPresentationMode("picture-in-picture");
+  }else if('requestPictureInPicture' in pipVideo){
+    pipVideo.requestPictureInPicture();
+  }
 }
 </script>
 
 </body>
 </html>
-
